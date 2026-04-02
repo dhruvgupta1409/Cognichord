@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -17,6 +17,7 @@ import {
 } from '../data/simulatedSessions';
 import { usePracticeStore } from '../store/practiceStore';
 import type { SimSession } from '../data/simulatedSessions';
+import { subscribeCommunitySession, type CommunitySession } from '../lib/db';
 
 const PUBLISHED_COGNITIVE = [
   { subject: 'Working Memory',  musicians: 76, baseline: 50 },
@@ -27,7 +28,7 @@ const PUBLISHED_COGNITIVE = [
   { subject: 'Exec. Function',  musicians: 64, baseline: 50 },
 ];
 
-function userSessionsToSim(sessions: ReturnType<typeof usePracticeStore.getState>['sessions']): SimSession[] {
+function sessionsToSim(sessions: Array<{ instrument: string; durationMin: number; complexity: number }>): SimSession[] {
   return sessions.map(s => {
     const complexity = s.complexity;
     const durationMin = s.durationMin;
@@ -50,7 +51,7 @@ function userSessionsToSim(sessions: ReturnType<typeof usePracticeStore.getState
     }
     const npi = Math.min(100, Math.max(0, ((bdnf - 100) / 100) * 120 + Math.min(40, 5 * 1.2)));
     return {
-      instrument: s.instrument,
+      instrument: s.instrument as SimSession['instrument'],
       durationMin,
       complexity,
       frequencyPerWeek: freq,
@@ -71,14 +72,18 @@ export default function Research() {
 
   const simSessions = useMemo(() => getSimulatedSessions(), []);
 
+  const [communitySessions, setCommunitySessions] = useState<CommunitySession[]>([]);
+  useEffect(() => subscribeCommunitySession(setCommunitySessions), []);
+  const communityConverted = useMemo(() => sessionsToSim(communitySessions), [communitySessions]);
+
   const userConverted = useMemo(
-    () => contribute ? userSessionsToSim(userSessions) : [],
+    () => contribute ? sessionsToSim(userSessions) : [],
     [userSessions, contribute]
   );
 
   const allSessions = useMemo(
-    () => [...simSessions, ...userConverted],
-    [simSessions, userConverted]
+    () => [...simSessions, ...communityConverted, ...userConverted],
+    [simSessions, communityConverted, userConverted]
   );
 
   const byInstrument = useMemo(() => aggregateByInstrument(allSessions),  [allSessions]);
@@ -124,10 +129,14 @@ export default function Research() {
                 <strong className="text-slate-300">5,000 computer-simulated scenarios</strong> — randomly generated
                 using our BDNF and dopamine models with a fixed seed (2025). Every single number in these charts
                 is the direct output of the same equations powering the Lab simulators; no empirical biomarker values are imported or interpolated.
+                {communityConverted.length > 0 && (
+                  <span className="text-cyan">
+                    {' '}Plus <strong>{communityConverted.length} real community session{communityConverted.length !== 1 ? 's' : ''}</strong> submitted by users worldwide.
+                  </span>
+                )}
                 {contribute && userSessions.length > 0 && (
                   <span className="text-emerald-light">
-                    {' '}Plus <strong>{userSessions.length} user-logged session{userSessions.length !== 1 ? 's' : ''}</strong> included
-                    from the practice log, processed through the same models.
+                    {' '}Plus <strong>{userSessions.length} of your own session{userSessions.length !== 1 ? 's' : ''}</strong> from the practice log.
                   </span>
                 )}
               </p>
@@ -191,9 +200,11 @@ export default function Research() {
             </div>
             <div className="text-xs text-slate-500">
               Total sessions analyzed
-              {contribute && userSessions.length > 0 && (
-                <span className="block text-emerald-light mt-0.5">
-                  ({simSessions.length.toLocaleString()} simulated + {userSessions.length} user-logged)
+              {(communityConverted.length > 0 || (contribute && userSessions.length > 0)) && (
+                <span className="block text-slate-500 mt-0.5">
+                  {simSessions.length.toLocaleString()} simulated
+                  {communityConverted.length > 0 && ` + ${communityConverted.length} community`}
+                  {contribute && userSessions.length > 0 && ` + ${userSessions.length} yours`}
                 </span>
               )}
             </div>
