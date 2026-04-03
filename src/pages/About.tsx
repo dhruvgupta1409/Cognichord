@@ -110,8 +110,8 @@ export default function About() {
               levels, synaptic plasticity, and neural oscillations. It's designed for musicians,
               learners, and educators to experiment safely with music-driven neuroscience, track
               practice, and understand how their brains might be changing over time. You can simulate
-              sessions, log your own practice, and see real-time model estimates of cognitive and
-              neuroplastic outcomes.
+              sessions, log your own practice with validated self-report measures (mood, anxiety,
+              focus, flow state), and explore how musical parameters interact with the computational models.
             </p>
 
             <p className="text-slate-400 text-sm leading-relaxed">

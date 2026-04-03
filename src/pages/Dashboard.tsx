@@ -3,7 +3,7 @@ import PracticeLogger from '../components/dashboard/PracticeLogger';
 import CumulativeStats from '../components/dashboard/CumulativeStats';
 import SessionList from '../components/dashboard/SessionList';
 import { usePracticeStore } from '../store/practiceStore';
-import { Brain, Trash2, User } from 'lucide-react';
+import { Brain, Trash2, User, Lock } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Dashboard() {
@@ -125,9 +125,29 @@ export default function Dashboard() {
           </div>
           {!currentUserId && (
             <p className="text-xs text-slate-600 max-w-xs">
-              Sessions are stored per ID. All sessions are pooled anonymously in the Research Dataset.
+              Sessions are stored only in your browser. Your data never leaves this device.
             </p>
           )}
+        </motion.div>
+
+        {/* ── Privacy notice ─────────────────────────────────────────────────── */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.08 }}
+          className="mb-6 rounded-xl border border-emerald/15 bg-emerald/[0.03] p-3.5 flex items-center gap-3"
+        >
+          <Lock className="w-4 h-4 text-emerald flex-shrink-0" />
+          <p className="text-xs text-slate-500 leading-relaxed">
+            <strong className="text-slate-400">Your data stays on this device.</strong>{' '}
+            All session data is stored only in your browser's local storage and is never transmitted to
+            any server or third party. You can export it as CSV or JSON at any time.
+            See the{' '}
+            <a href="/research" className="text-emerald hover:text-emerald-light transition-colors underline underline-offset-2">
+              Research page
+            </a>{' '}
+            for why community data sharing was removed (COPPA &amp; research ethics).
+          </p>
         </motion.div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

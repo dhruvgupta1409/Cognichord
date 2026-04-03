@@ -1,64 +1,38 @@
-import { ref, push, onValue, type DataSnapshot } from 'firebase/database';
-import { db } from './firebase';
+// Firebase integration removed for privacy and COPPA compliance.
+//
+// ETHICAL RATIONALE
+// ─────────────────
+// The previous version used Firebase Realtime Database to submit every practice
+// session to a shared database that was streamed live to all site visitors.
+// This was removed for the following reasons:
+//
+//  1. COPPA (Children's Online Privacy Protection Act, USA)
+//     Music education tools are frequently used by children under 13. Collecting
+//     and publicly displaying their self-reported mood scores, anxiety ratings,
+//     and frustration data without verifiable parental consent violates COPPA.
+//     Operators of websites directed at children face significant legal liability
+//     for collecting personal information without a compliant consent mechanism.
+//
+//  2. Research ethics
+//     In any legitimate research study, participants must provide informed consent
+//     before their data is collected or shared — even anonymously. A checkbox
+//     toggle on a website does not constitute adequate informed consent, especially
+//     for minors. IRB/ethics board approval would be required before sharing
+//     real participant data publicly.
+//
+//  3. Sensitive self-report data
+//     Mood (1–7), anxiety (1–5), frustration, and flow state are personal,
+//     health-adjacent measurements. Displaying them publicly — even without
+//     names — is inappropriate for a general-audience tool used by young people.
+//
+// CURRENT BEHAVIOUR
+// ─────────────────
+// All session data is stored only in the user's own browser (localStorage via
+// Zustand persist). Nothing is ever sent to any external server or database.
+// Users can export their own data as CSV or JSON at any time from the Dashboard.
+
 import type { PracticeSession } from '../types';
 
-export interface CommunitySession {
-  instrument: string;
-  durationMin: number;
-  complexity: number;
-  sessionType: string;
-  date: string;
-  timestamp: number;
-  // Self-report fields (optional — older records won't have them)
-  timeOfDay?: string;
-  practiceContext?: string;
-  preMood?: number;
-  preEnergy?: number;
-  preAnxiety?: number;
-  sleepQuality?: number;
-  postMood?: number;
-  sessionFocus?: number;
-  flowState?: number;
-  perceivedProgress?: number;
-  hadFrustration?: boolean;
-  goalsMet?: string;
-}
-
-export function submitSession(session: PracticeSession): void {
-  const payload: Record<string, unknown> = {
-    instrument:    session.instrument,
-    durationMin:   session.durationMin,
-    complexity:    session.complexity,
-    sessionType:   session.sessionType,
-    date:          session.date,
-    timestamp:     Date.now(),
-  };
-
-  // Include self-report fields when present
-  if (session.timeOfDay      != null) payload.timeOfDay      = session.timeOfDay;
-  if (session.practiceContext != null) payload.practiceContext = session.practiceContext;
-  if (session.preMood         != null) payload.preMood         = session.preMood;
-  if (session.preEnergy       != null) payload.preEnergy       = session.preEnergy;
-  if (session.preAnxiety      != null) payload.preAnxiety      = session.preAnxiety;
-  if (session.sleepQuality    != null) payload.sleepQuality    = session.sleepQuality;
-  if (session.postMood        != null) payload.postMood        = session.postMood;
-  if (session.sessionFocus    != null) payload.sessionFocus    = session.sessionFocus;
-  if (session.flowState       != null) payload.flowState       = session.flowState;
-  if (session.perceivedProgress != null) payload.perceivedProgress = session.perceivedProgress;
-  if (session.hadFrustration  != null) payload.hadFrustration  = session.hadFrustration;
-  if (session.goalsMet        != null) payload.goalsMet        = session.goalsMet;
-
-  push(ref(db, 'sessions'), payload);
-}
-
-export function subscribeCommunitySession(
-  callback: (sessions: CommunitySession[]) => void
-): () => void {
-  const sessionsRef = ref(db, 'sessions');
-  const handler = (snapshot: DataSnapshot) => {
-    const data = snapshot.val();
-    if (!data) { callback([]); return; }
-    callback(Object.values(data) as CommunitySession[]);
-  };
-  return onValue(sessionsRef, handler);
-}
+/** No-op: retained for interface compatibility. Session data stays in localStorage. */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function submitSession(_session: PracticeSession): void {}

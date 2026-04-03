@@ -118,14 +118,22 @@ export default function CumulativeStats() {
     );
     if (full.length < 3) return null;
 
+    const preMoods  = full.map(s => s.preMood!);
+    const postMoods = full.map(s => s.postMood!);
     const changes   = full.map(s => s.postMood! - s.preMood!);
     const focuses   = full.map(s => s.sessionFocus!);
     const progs     = full.map(s => s.perceivedProgress!);
-    const anxieties = full.filter(s => s.preAnxiety != null).map(s => s.preAnxiety!);
+    const anxieties = full.filter(s => s.preAnxiety   != null).map(s => s.preAnxiety!);
+    const energies  = full.filter(s => s.preEnergy    != null).map(s => s.preEnergy!);
+    const sleeps    = full.filter(s => s.sleepQuality != null).map(s => s.sleepQuality!);
     const m = (arr: number[]) => arr.reduce((a, b) => a + b, 0) / arr.length;
 
     return {
       n:           full.length,
+      preMoodM:    m(preMoods).toFixed(2),
+      preMoodSD:   sd(preMoods).toFixed(2),
+      postMoodM:   m(postMoods).toFixed(2),
+      postMoodSD:  sd(postMoods).toFixed(2),
       affectM:     m(changes).toFixed(2),
       affectSD:    sd(changes).toFixed(2),
       focusM:      m(focuses).toFixed(2),
@@ -134,6 +142,10 @@ export default function CumulativeStats() {
       progressSD:  sd(progs).toFixed(2),
       anxietyM:    anxieties.length >= 3 ? m(anxieties).toFixed(2) : null,
       anxietySD:   anxieties.length >= 3 ? sd(anxieties).toFixed(2) : null,
+      energyM:     energies.length  >= 3 ? m(energies).toFixed(2)  : null,
+      energySD:    energies.length  >= 3 ? sd(energies).toFixed(2) : null,
+      sleepM:      sleeps.length    >= 3 ? m(sleeps).toFixed(2)    : null,
+      sleepSD:     sleeps.length    >= 3 ? sd(sleeps).toFixed(2)   : null,
       flowN:       full.filter(s => s.flowState === 3).length,
       flowPct:     (full.filter(s => s.flowState === 3).length / full.length * 100).toFixed(1),
       avgDuration: (full.reduce((a, s) => a + s.durationMin, 0) / full.length).toFixed(0),
@@ -361,14 +373,20 @@ export default function CumulativeStats() {
                   </thead>
                   <tbody className="divide-y divide-white/[0.04]">
                     {[
-                      { label: 'Session duration (min)', m: research.avgDuration, sd: research.durationSD, scale: '5–180' },
-                      { label: 'Pre-session mood',        m: research.affectM,     sd: null,               scale: '1–7'   },
-                      { label: 'Post-session mood',       m: null,                 sd: null,               scale: '1–7'   },
-                      { label: 'Affect change (Δmood)',   m: research.affectM,     sd: research.affectSD,  scale: '−6 to +6' },
-                      { label: 'Session focus',           m: research.focusM,      sd: research.focusSD,   scale: '1–5'  },
-                      { label: 'Perceived progress',      m: research.progressM,   sd: research.progressSD, scale: '1–5' },
+                      { label: 'Session duration (min)',  m: research.avgDuration, sd: research.durationSD,  scale: '5–180'    },
+                      { label: 'Pre-session mood',        m: research.preMoodM,    sd: research.preMoodSD,   scale: '1–7'      },
+                      { label: 'Post-session mood',       m: research.postMoodM,   sd: research.postMoodSD,  scale: '1–7'      },
+                      { label: 'Affect change (Δmood)',   m: research.affectM,     sd: research.affectSD,    scale: '−6 to +6' },
+                      { label: 'Session focus',           m: research.focusM,      sd: research.focusSD,     scale: '1–5'      },
+                      { label: 'Perceived progress',      m: research.progressM,   sd: research.progressSD,  scale: '1–5'      },
                       ...(research.anxietyM
                         ? [{ label: 'Pre-session anxiety', m: research.anxietyM, sd: research.anxietySD, scale: '1–5' }]
+                        : []),
+                      ...(research.energyM
+                        ? [{ label: 'Pre-session energy',  m: research.energyM,  sd: research.energySD,  scale: '1–5' }]
+                        : []),
+                      ...(research.sleepM
+                        ? [{ label: 'Sleep quality',       m: research.sleepM,   sd: research.sleepSD,   scale: '1–5' }]
                         : []),
                     ].map((row, i) => (
                       <tr key={i}>

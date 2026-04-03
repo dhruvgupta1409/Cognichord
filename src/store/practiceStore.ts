@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { PracticeSession, CumulativeMetrics } from '../types';
-import { submitSession } from '../lib/db';
 
 interface PracticeStore {
   sessions: PracticeSession[];
@@ -189,7 +188,6 @@ export const usePracticeStore = create<PracticeStore>()(
         set(state => ({
           sessions: [fullSession, ...state.sessions],
         }));
-        submitSession(fullSession);
       },
 
       removeSession: (id) => {

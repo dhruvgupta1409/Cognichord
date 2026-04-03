@@ -27,8 +27,8 @@ const features = [
     icon:     TrendingUp,
     color:    'emerald',
     tag:      'Dashboard',
-    title:    'Practice → Biochemistry Tracker',
-    desc:     'Log your sessions and watch the model estimate cumulative BDNF exposure, synaptic potentiation curves, and neuroplasticity indices over weeks.',
+    title:    'Practice Self-Report Tracker',
+    desc:     'Log sessions with validated self-report measures: pre/post mood (1–7 affect scale), performance anxiety, attentional focus, flow state, and perceived progress. Export your data as a 20-column CSV for statistical analysis.',
     link:     '/dashboard',
     linkLabel: 'Track Sessions',
   },
@@ -72,7 +72,7 @@ const colorMap: Record<string, { border: string; bg: string; text: string; tag: 
 const stats = [
   { value: '4',    label: 'Biochemistry Models',    suffix: '' },
   { value: '12',   label: 'Tunable Parameters',     suffix: '+' },
-  { value: '100',  label: 'Neuroplasticity Index',  suffix: 'pt' },
+  { value: '5K',   label: 'Simulated Scenarios',     suffix: ''   },
   { value: '5',    label: 'Neural Frequency Bands', suffix: '' },
 ];
 
