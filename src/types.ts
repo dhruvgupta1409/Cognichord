@@ -7,6 +7,11 @@ export type InstrumentType =
   | 'trumpet' | 'trombone' | 'french horn' | 'tuba'
   | 'drums' | 'marimba' | 'voice';
 export type RhythmPattern = 'steady' | 'syncopated' | 'triplet' | 'complex' | 'polyrhythm';
+export type TimeOfDay = 'morning' | 'afternoon' | 'evening' | 'night';
+export type PracticeContext = 'alone' | 'teacher' | 'group';
+export type GoalsMet = 'yes' | 'partial' | 'no';
+
+// ─── Simulator model types (unchanged — used in Lab page) ────────────────────
 
 export interface DopamineParams {
   bpm: number;
@@ -115,6 +120,8 @@ export interface OscillationResult {
   cognitiveEngagementIndex: number;
 }
 
+// ─── Practice session (self-reported, stored in Firebase + localStorage) ─────
+
 export interface PracticeSession {
   id: string;
   userId?: string;
@@ -122,24 +129,61 @@ export interface PracticeSession {
   instrument: InstrumentType;
   durationMin: number;
   sessionType: 'new_piece' | 'technique' | 'improvisation' | 'memory_recall' | 'performance';
+  /** 1–5 technical difficulty of material practiced */
   complexity: number;
   notes?: string;
-  predictedBDNF?: number;
-  predictedDA?: number;
-  predictedLTP?: number;
+
+  // ── Pre-session context ─────────────────────────────────────────────────────
+  timeOfDay?: TimeOfDay;
+  practiceContext?: PracticeContext;
+  /** 1–7: 1 = very negative, 4 = neutral, 7 = very positive  (single-item affect measure) */
+  preMood?: number;
+  /** 1–5 self-rated energy / alertness before session */
+  preEnergy?: number;
+  /** 1–5 music performance anxiety before session (1 = none, 5 = severe) */
+  preAnxiety?: number;
+  /** 1–5 subjective sleep quality the previous night */
+  sleepQuality?: number;
+
+  // ── Post-session outcomes ────────────────────────────────────────────────────
+  /** 1–7 same scale as preMood; affect delta = postMood − preMood */
+  postMood?: number;
+  /** 1–5 attentional focus during session */
+  sessionFocus?: number;
+  /** 1 = no flow, 2 = partial flow, 3 = full flow state */
+  flowState?: 1 | 2 | 3;
+  /** 1–5 self-rated progress toward practice goals */
+  perceivedProgress?: number;
+  /** Did frustrating moments significantly disrupt the session? */
+  hadFrustration?: boolean;
+  goalsMet?: GoalsMet;
 }
+
+// ─── Aggregate metrics computed from logged sessions ─────────────────────────
 
 export interface CumulativeMetrics {
   totalSessions: number;
   totalHours: number;
   weeklyFrequency: number;
-  currentNPI: number;
-  cumulativeBDNF: number;
-  averageDopamineIndex: number;
-  synapticPotentiation: number;
   streakDays: number;
   longestStreak: number;
+  /** 0–100: percentage of calendar weeks that contained ≥1 session */
+  consistencyScore: number;
+  /** Mean (postMood − preMood); null when <3 sessions have mood data */
+  avgAffectChange: number | null;
+  avgPreMood: number | null;
+  avgPostMood: number | null;
+  /** Mean sessionFocus (1–5); null when insufficient data */
+  avgSessionFocus: number | null;
+  /** Mean perceivedProgress (1–5); null when insufficient data */
+  avgPerceivedProgress: number | null;
+  /** % of sessions where flowState === 3 (full flow) */
+  flowRate: number | null;
+  /** Mean preAnxiety (1–5) */
+  avgPreAnxiety: number | null;
 }
+
+// ─── Other shared types ───────────────────────────────────────────────────────
 
 export interface Neurotransmitter {
   id: string;

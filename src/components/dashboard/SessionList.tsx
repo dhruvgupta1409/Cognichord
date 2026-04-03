@@ -4,6 +4,9 @@ import { usePracticeStore } from '../../store/practiceStore';
 import type { PracticeSession } from '../../types';
 import { useState } from 'react';
 
+const FLOW_LABELS: Record<number, string> = { 1: 'No flow', 2: 'Partial', 3: 'Full flow' };
+const FLOW_COLORS: Record<number, string> = { 1: '#475569', 2: '#F59E0B', 3: '#10B981' };
+
 const SESSION_TYPE_LABELS: Record<PracticeSession['sessionType'], string> = {
   new_piece:     'New Piece',
   technique:     'Technique',
@@ -24,12 +27,6 @@ function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString('en-US', {
     month: 'short', day: 'numeric', year: 'numeric',
   });
-}
-
-function estimateBDNF(session: PracticeSession): number {
-  return Math.round(
-    Math.log1p(session.durationMin / 25) * (0.5 + session.complexity / 5) * 50
-  );
 }
 
 export default function SessionList() {
@@ -67,8 +64,10 @@ export default function SessionList() {
       <div className="space-y-2">
         <AnimatePresence>
           {displayed.map(session => {
-            const bdnf = estimateBDNF(session);
             const isExpanded = expanded === session.id;
+            const hasSelf = session.preMood != null || session.sessionFocus != null;
+            const affectChange = session.preMood != null && session.postMood != null
+              ? session.postMood - session.preMood : null;
 
             return (
               <motion.div
@@ -90,7 +89,17 @@ export default function SessionList() {
                         <span className={`tag ${SESSION_TYPE_COLORS[session.sessionType]}`}>
                           {SESSION_TYPE_LABELS[session.sessionType]}
                         </span>
-                        <span className="tag tag-emerald">C{session.complexity}/5</span>
+                        <span className="tag tag-emerald">D{session.complexity}/5</span>
+                        {affectChange != null && (
+                          <span
+                            className="tag font-mono"
+                            style={{ color: affectChange >= 0 ? '#10b981' : '#ef4444',
+                                     borderColor: affectChange >= 0 ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)',
+                                     background: affectChange >= 0 ? 'rgba(16,185,129,0.08)' : 'rgba(239,68,68,0.08)' }}
+                          >
+                            {affectChange >= 0 ? '+' : ''}{affectChange} mood
+                          </span>
+                        )}
                       </div>
                       <div className="flex items-center gap-4 text-xs text-slate-500">
                         <span className="flex items-center gap-1">
@@ -101,9 +110,9 @@ export default function SessionList() {
                           <Calendar className="w-3 h-3" />
                           {formatDate(session.date)}
                         </span>
-                        <span className="text-emerald-light font-mono">
-                          +{bdnf} BDNF
-                        </span>
+                        {session.timeOfDay && (
+                          <span className="capitalize">{session.timeOfDay}</span>
+                        )}
                       </div>
                     </div>
 
@@ -130,24 +139,56 @@ export default function SessionList() {
                       transition={{ duration: 0.2 }}
                       className="border-t border-white/[0.06] px-3 py-3"
                     >
-                      <div className="grid grid-cols-3 gap-3 mb-2.5">
-                        <div>
-                          <div className="text-xs text-slate-600 mb-0.5">Est. BDNF Release (model)</div>
-                          <div className="font-mono text-sm text-emerald-light">+{bdnf} a.u.</div>
+                      {hasSelf ? (
+                        <div className="grid grid-cols-3 gap-3 mb-2.5">
+                          {session.preMood != null && session.postMood != null && (
+                            <div>
+                              <div className="text-xs text-slate-600 mb-0.5">Mood (pre → post)</div>
+                              <div className="font-mono text-sm text-slate-300">
+                                {session.preMood} → {session.postMood}
+                                <span className="ml-1 text-xs"
+                                  style={{ color: affectChange! >= 0 ? '#10b981' : '#ef4444' }}>
+                                  ({affectChange! >= 0 ? '+' : ''}{affectChange})
+                                </span>
+                              </div>
+                            </div>
+                          )}
+                          {session.sessionFocus != null && (
+                            <div>
+                              <div className="text-xs text-slate-600 mb-0.5">Focus</div>
+                              <div className="font-mono text-sm text-cyan">{session.sessionFocus}/5</div>
+                            </div>
+                          )}
+                          {session.perceivedProgress != null && (
+                            <div>
+                              <div className="text-xs text-slate-600 mb-0.5">Progress</div>
+                              <div className="font-mono text-sm text-emerald-light">{session.perceivedProgress}/5</div>
+                            </div>
+                          )}
+                          {session.flowState != null && (
+                            <div>
+                              <div className="text-xs text-slate-600 mb-0.5">Flow State</div>
+                              <div className="font-mono text-sm" style={{ color: FLOW_COLORS[session.flowState] }}>
+                                {FLOW_LABELS[session.flowState]}
+                              </div>
+                            </div>
+                          )}
+                          {session.preAnxiety != null && (
+                            <div>
+                              <div className="text-xs text-slate-600 mb-0.5">Anxiety (pre)</div>
+                              <div className="font-mono text-sm text-pink">{session.preAnxiety}/5</div>
+                            </div>
+                          )}
+                          {session.practiceContext != null && (
+                            <div>
+                              <div className="text-xs text-slate-600 mb-0.5">Context</div>
+                              <div className="font-mono text-sm text-slate-300 capitalize">{session.practiceContext}</div>
+                            </div>
+                          )}
                         </div>
-                        <div>
-                          <div className="text-xs text-slate-600 mb-0.5">Dopamine Reward (model)</div>
-                          <div className="font-mono text-sm text-cyan">
-                            {(55 + session.complexity * 8).toFixed(0)}/100
-                          </div>
-                        </div>
-                        <div>
-                          <div className="text-xs text-slate-600 mb-0.5">Syn. Potentiation (model)</div>
-                          <div className="font-mono text-sm text-purple-light">
-                            +{(session.complexity * 2.5 + session.durationMin / 20).toFixed(1)}%
-                          </div>
-                        </div>
-                      </div>
+                      ) : (
+                        <p className="text-xs text-slate-600 mb-2.5 italic">No self-report data for this session.</p>
+                      )}
                       {session.notes && (
                         <p className="text-xs text-slate-500 italic">{session.notes}</p>
                       )}

@@ -44,8 +44,8 @@ export default function Dashboard() {
               <span className="gradient-text">Practice Lab</span>
             </h1>
             <p className="text-slate-500 text-base max-w-2xl">
-              Log sessions, track cumulative biochemical predictions from the models, and monitor your
-              Neuroplasticity Index over time. These are model‑based estimates intended for education and for promoting the study of music, not clinical markers!
+              Log your practice sessions with self-reported mood, focus, flow state, and anxiety measures.
+              Track how practice affects your affect over time and export clean data for research analysis.
             </p>
           </div>
 
@@ -168,16 +168,16 @@ export default function Dashboard() {
           <div className="flex items-start gap-3">
             <Brain className="w-5 h-5 text-purple-light mt-0.5 flex-shrink-0" />
             <div>
-              <h4 className="text-sm font-semibold text-slate-200 mb-1">How predictions work</h4>
+              <h4 className="text-sm font-semibold text-slate-200 mb-1">What this data captures</h4>
               <p className="text-sm text-slate-500 leading-relaxed">
-                Each logged session feeds the BDNF and dopamine models with your instrument,
-                duration, and complexity data. The system applies standard exponential "half‑life"
-                decay and cumulative exposure equations, plus simple receptor sensitivity rules, to
-                forecast a notional biochemical trajectory. The Neuroplasticity Index (0–100) is a
-                composite of relative BDNF elevation above baseline plus accumulated session exposure,
-                calibrated so that consistent, long‑term instrumental practice in line with typical
-                musician training tends to fall in the 60–85 range. Values are illustrative and
-                model‑based, not direct lab measurements.
+                Each session captures self-reported measures validated in music psychology research:
+                pre/post affect (mood, 1–7), energy, performance anxiety, sleep quality, attentional focus,
+                flow state, and perceived progress. Affect change (postMood − preMood) tracks whether
+                practice improves your mood. Flow state and focus measure engagement quality. Over time,
+                these produce exportable data suitable for correlational and longitudinal analysis — for
+                example: does session frequency predict mood lift? Does higher pre-anxiety reduce flow?
+                All data is yours to download as CSV or JSON. The neural simulators in the Lab are
+                educational tools and are separate from this personal tracking system.
               </p>
             </div>
           </div>
