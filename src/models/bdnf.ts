@@ -35,7 +35,7 @@ const DECAY_CONSTANT = Math.LN2 / BDNF_HALF_LIFE_DAYS;
 const BDNF_BASELINE = 100;
 const SESSION_MAX_DELTA = 32;
 
-function sessionBDNFDelta(
+export function sessionBDNFDelta(
   durationMin: number,
   complexity: number,
   instrument: string,
@@ -69,6 +69,7 @@ export function simulateBDNF(params: BDNFParams): BDNFResult {
     frequencyPerWeek,
     totalWeeks,
     instrument,
+    initialBDNF,
   } = params;
 
   const totalDays = totalWeeks * 7;
@@ -82,7 +83,7 @@ export function simulateBDNF(params: BDNFParams): BDNFResult {
     }
   }
 
-  let bdnf = BDNF_BASELINE;
+  let bdnf = initialBDNF ?? BDNF_BASELINE;
   let cumulativeExposure = 0;
   let sessionsCompleted = 0;
   const trajectory: BDNFPoint[] = [];
@@ -126,6 +127,97 @@ export function simulateBDNF(params: BDNFParams): BDNFResult {
     finalNPI,
     peakBDNF,
     averageBDNF: avgBDNF,
+    densityGain,
+  };
+}
+
+// ─── History-based simulation ─────────────────────────────────────────────────
+// Builds a real day-by-day BDNF trajectory from a user's actual logged sessions
+// rather than assuming a uniform practice schedule.
+
+export interface HistorySession {
+  date: string;       // ISO date string
+  durationMin: number;
+  complexity: number;
+  instrument: string;
+}
+
+export interface HistoryResult {
+  trajectory: BDNFPoint[];
+  currentBDNF: number;
+  finalNPI: number;
+  densityGain: number;
+}
+
+export function simulateBDNFFromHistory(sessions: HistorySession[]): HistoryResult {
+  if (sessions.length === 0) {
+    return { trajectory: [], currentBDNF: BDNF_BASELINE, finalNPI: 0, densityGain: 0 };
+  }
+
+  // Sort ascending by date
+  const sorted = [...sessions].sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+  );
+
+  const startDate = new Date(sorted[0].date);
+  startDate.setHours(0, 0, 0, 0);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const totalDays = Math.max(
+    1,
+    Math.ceil((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24))
+  ) + 1;
+
+  // Group sessions by day offset from start
+  const sessionsByDay = new Map<number, HistorySession[]>();
+  for (const s of sorted) {
+    const d = new Date(s.date);
+    d.setHours(0, 0, 0, 0);
+    const dayOffset = Math.round((d.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+    if (!sessionsByDay.has(dayOffset)) sessionsByDay.set(dayOffset, []);
+    sessionsByDay.get(dayOffset)!.push(s);
+  }
+
+  let bdnf = BDNF_BASELINE;
+  let cumulativeExposure = 0;
+  let sessionsCompleted = 0;
+  const trajectory: BDNFPoint[] = [];
+
+  for (let day = 0; day < totalDays; day++) {
+    // Daily exponential decay toward baseline
+    bdnf = BDNF_BASELINE + (bdnf - BDNF_BASELINE) * Math.exp(-DECAY_CONSTANT);
+
+    const daySessions = sessionsByDay.get(day) ?? [];
+    const hasPractice = daySessions.length > 0;
+
+    for (const s of daySessions) {
+      const streakBonus = 1.0 + 0.08 * Math.min(sessionsCompleted, 12) / 12;
+      const delta = sessionBDNFDelta(s.durationMin, s.complexity, s.instrument) * streakBonus;
+      bdnf += delta;
+      cumulativeExposure += delta;
+      sessionsCompleted++;
+    }
+
+    bdnf = Math.min(BDNF_BASELINE * 2.2, bdnf);
+
+    trajectory.push({
+      day,
+      bdnf: parseFloat(bdnf.toFixed(2)),
+      neuroplasticityIndex: neuroplasticityIndex(bdnf, sessionsCompleted),
+      hasPractice,
+      synapticDensity: synapticDensity(cumulativeExposure, BDNF_BASELINE),
+    });
+  }
+
+  const last = trajectory[trajectory.length - 1];
+  const densityGain = parseFloat(((last.synapticDensity - 1.0) * 100).toFixed(1));
+
+  return {
+    trajectory,
+    currentBDNF: parseFloat(bdnf.toFixed(2)),
+    finalNPI: last.neuroplasticityIndex,
     densityGain,
   };
 }

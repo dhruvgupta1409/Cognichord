@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import PracticeLogger from '../components/dashboard/PracticeLogger';
 import CumulativeStats from '../components/dashboard/CumulativeStats';
 import SessionList from '../components/dashboard/SessionList';
+import NeuralImpact from '../components/dashboard/NeuralImpact';
 import { usePracticeStore } from '../store/practiceStore';
 import { Brain, Trash2, User, Lock } from 'lucide-react';
 import { useState } from 'react';
@@ -141,11 +142,11 @@ export default function Dashboard() {
             <strong className="text-slate-400">100% Local Storage — Data never leaves your device.</strong>{' '}
             All session data is stored only in your browser's local storage and is never transmitted to
             any server or third party. You can export it as CSV or JSON at any time.
-            See the{' '}
+            Visit the{' '}
             <a href="/research" className="text-emerald hover:text-emerald-light transition-colors underline underline-offset-2">
-              Research page
+              Model Explorer
             </a>{' '}
-            for why community data sharing was removed (COPPA &amp; research ethics).
+            to see how practice parameters affect model predictions.
           </p>
         </motion.div>
 
@@ -178,29 +179,16 @@ export default function Dashboard() {
           </div>
         </div>
 
-                <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mt-8 bg-purple/[0.04] border border-purple/10 rounded-xl p-5"
-        >
-          <div className="flex items-start gap-3">
-            <Brain className="w-5 h-5 text-purple-light mt-0.5 flex-shrink-0" />
-            <div>
-              <h4 className="text-sm font-semibold text-slate-200 mb-1">What this data captures</h4>
-              <p className="text-sm text-slate-500 leading-relaxed">
-                Each session captures self-reported measures validated in music psychology research:
-                pre/post affect (mood, 1–7), energy, performance anxiety, sleep quality, attentional focus,
-                flow state, and perceived progress. Affect change (postMood − preMood) tracks whether
-                practice improves your mood. Flow state and focus measure engagement quality. Over time,
-                these produce exportable data suitable for correlational and longitudinal analysis — for
-                example: does session frequency predict mood lift? Does higher pre-anxiety reduce flow?
-                All data is yours to download as CSV or JSON. The neural simulators in the Lab are
-                educational tools and are separate from this personal tracking system.
-              </p>
-            </div>
-          </div>
-        </motion.div>
+                {sessions.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.4 }}
+            className="mt-8"
+          >
+            <NeuralImpact sessions={sessions} />
+          </motion.div>
+        )}
       </div>
     </div>
   );

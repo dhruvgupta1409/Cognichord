@@ -27,6 +27,7 @@ export function simulatePlasticity(params: PlasticityParams): PlasticityResult {
     sessionDurationMin,
     practiceDays,
     restPeriodHours,
+    bdnfLevel,
   } = params;
 
   const rng = seededRNG(
@@ -41,9 +42,20 @@ export function simulatePlasticity(params: PlasticityParams): PlasticityResult {
   const numSteps  = Math.floor(totalSec / dt_sec);
   const downsample = Math.max(1, Math.floor(numSteps / 300));
 
+  // BDNF lowers BCM modification threshold via TrkB-mediated signaling.
+  // Elevated BDNF increases TrkB phosphorylation, which enhances NMDA receptor
+  // conductance and reduces the Ca²⁺ required for LTP induction.
+  // (Figurov et al. 1996; Korte et al. 1995; Bramham & Messaoudi 2005)
+  const bdnfExcess = bdnfLevel
+    ? Math.max(0, (bdnfLevel - 100) / 100)
+    : 0;
+  const theta_m_initial = parseFloat(
+    (0.40 * (1.0 - 0.30 * Math.min(bdnfExcess, 1.0))).toFixed(4)
+  );
+
   let W       = 0.50;
   let Ca      = 0.0;
-  let theta_m = 0.40;
+  let theta_m = theta_m_initial;
 
   const tau_ca     = 0.08;
   const ca_amp     = ampScale * 3.5;
@@ -124,5 +136,6 @@ export function simulatePlasticity(params: PlasticityParams): PlasticityResult {
     ltdEvents,
     potentiationPercent,
     plasticityIndex,
+    initialThreshold: theta_m_initial,
   };
 }

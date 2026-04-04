@@ -45,6 +45,8 @@ export interface BDNFParams {
   frequencyPerWeek: number;
   totalWeeks: number;
   instrument: InstrumentType;
+  /** Starting BDNF level (default 100 = baseline). Used when projecting forward from a real history. */
+  initialBDNF?: number;
 }
 
 export interface BDNFPoint {
@@ -69,6 +71,8 @@ export interface PlasticityParams {
   sessionDurationMin: number;
   practiceDays: number;
   restPeriodHours: number;
+  /** Current BDNF level (a.u.). When elevated above 100 (baseline), lowers θ_M via TrkB signaling (Figurov et al. 1996). */
+  bdnfLevel?: number;
 }
 
 export interface PlasticityPoint {
@@ -86,6 +90,8 @@ export interface PlasticityResult {
   ltdEvents: number;
   potentiationPercent: number;
   plasticityIndex: number;
+  /** θ_M at session start — BDNF-adjusted when bdnfLevel is provided */
+  initialThreshold: number;
 }
 
 export interface OscillationParams {
