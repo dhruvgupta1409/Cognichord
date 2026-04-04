@@ -6,7 +6,7 @@ const pages = [
   {
     icon:      Zap,
     color:     'cyan',
-    name:      'Simulation Lab',
+    name:      'Lab',
     path:      '/lab',
     desc:      'Four live simulators covering dopamine reward dynamics, BDNF neuroplasticity, BCM synaptic plasticity, and neural oscillation entrainment. Adjust musical parameters with sliders and watch each model respond in real time.',
     linkLabel: 'Open Lab',
@@ -14,7 +14,7 @@ const pages = [
   {
     icon:      Dna,
     color:     'emerald',
-    name:      'Practice Dashboard',
+    name:      'Dashboard',
     path:      '/dashboard',
     desc:      'Log practice sessions with self-reported mood, focus, and flow state. Once you have sessions, the dashboard runs the BDNF and dopamine models on your actual data and shows a neural impact analysis alongside your session history.',
     linkLabel: 'Track Sessions',
@@ -30,9 +30,9 @@ const pages = [
   {
     icon:      BarChart2,
     color:     'purple',
-    name:      'Model Explorer',
+    name:      'Explorer',
     path:      '/research',
-    desc:      'See how practice parameters affect model predictions. Charts sweep across frequency, session duration, complexity, and instrument, showing the range of outputs the models produce. Clearly labeled as model outputs, not empirical data.',
+    desc:      'Dig into how practice parameters shape model outputs. Built from 5,000 randomized simulated sessions, this page charts what the models predict across the full input space — frequency, duration, complexity, and instrument. Model outputs only, not empirical human data.',
     linkLabel: 'Explore Parameters',
   },
   {
@@ -40,7 +40,7 @@ const pages = [
     color:     'pink',
     name:      'About',
     path:      '/about',
-    desc:      'Read the equations, assumptions, and literature sources behind each simulation. Includes explicit notes on which parameter values are empirically grounded and which are modeling choices, along with a full tech stack breakdown.',
+    desc:      'Read the science and research behind each model. Learn about our purpose, the assumptions we make, and the peer-reviewed literature that inspired the project.',
     linkLabel: 'See Methods',
   },
 ];
@@ -56,7 +56,7 @@ const colorMap: Record<string, { border: string; bg: string; text: string; tag: 
 const stats = [
   { value: '4',   label: 'Biochemistry Models',  suffix: ''  },
   { value: '12',  label: 'Tunable Parameters',   suffix: '+' },
-  { value: '5',   label: 'Neural Frequency Bands', suffix: '' },
+  { value: '5,000', label: 'Simulated Sessions',    suffix: '' },
   { value: '100', label: 'Browser-Private',       suffix: '%' },
 ];
 
@@ -78,7 +78,7 @@ export default function FeatureGrid() {
         <p className="text-slate-500 text-base max-w-xl mx-auto">
           Cognichord is built around four neuroscience-inspired computational models,
           a personal practice tracker, and a library of educational content.
-          Each page below has a specific role. Start anywhere that interests you.
+          Each page below has a specific role towards this project. Start anywhere that interests you.
         </p>
       </motion.div>
 

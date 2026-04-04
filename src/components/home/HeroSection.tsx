@@ -40,7 +40,7 @@ export default function HeroSection() {
           transition={{ duration: 0.55, delay: 0.2 }}
           className="text-slate-300 text-lg sm:text-xl leading-relaxed max-w-2xl mx-auto mb-3"
         >
-          Explore what practicing music does to your brain.
+          Explore what practicing music does to your brain!
         </motion.p>
 
         <motion.p
