@@ -112,7 +112,7 @@ export default function FeatureGrid() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.07 }}
-              className={`card-glass card-glass-hover rounded-xl p-6 border ${c.border} transition-all duration-300 flex flex-col`}
+              className={`card-glass card-glass-hover rounded-xl p-6 border ${c.border} transition-all duration-300 flex flex-col${i === 3 ? ' lg:col-start-2' : ''}`}
             >
               <div className={`w-9 h-9 rounded-lg ${c.bg} flex items-center justify-center mb-4`}>
                 <Icon className={`w-4.5 h-4.5 ${c.text}`} />
