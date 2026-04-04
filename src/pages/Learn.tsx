@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const RESEARCH_AREAS = [
   {
     title: 'Sharp-Wave Ripples & Musical Memory',
-    desc: 'During sleep following practice, the hippocampus generates sharp‑wave ripple (SWR) events — brief high‑frequency (≈80–120 Hz) oscillations nested in slower sharp waves — that replay patterns of neural activity associated with recent learning. These replay events help transfer labile hippocampal representations toward more stable cortico‑hippocampal networks, supporting long‑term consolidation of sequences, including those involved in musical performance.',
+    desc: 'During sleep following practice, the hippocampus generates sharp‑wave ripple (SWR) events, brief high‑frequency (≈80–120 Hz) oscillations nested in slower sharp waves that replay patterns of neural activity associated with recent learning. These replay events help transfer labile hippocampal representations toward more stable cortico‑hippocampal networks, supporting long‑term consolidation of sequences, including those involved in musical performance.',
     tag: 'Memory',   tagColor: 'tag-cyan',
     refs: ['Buzsáki G. (2015). Hippocampal sharp wave‑ripple. Hippocampus.', 'Stickgold R. (2005). Sleep‑dependent memory consolidation. Nature.'],
   },
@@ -58,7 +58,7 @@ export default function Learn() {
             <span className="gradient-text">Music & the Brain</span>
           </h1>
           <p className="text-slate-500 text-base max-w-2xl">
-            From synaptic signaling molecules to whole‑brain network dynamics — understand
+            From synaptic signaling molecules to whole‑brain network dynamics, you can understand
             the molecular and circuit‑level mechanisms scientists study when they ask how music shapes the brain.
           </p>
         </motion.div>
@@ -92,7 +92,7 @@ export default function Learn() {
                 and functional changes across many of these systems in both children and adults.
               </p>
               <p className="text-slate-400 text-sm leading-relaxed mb-4">
-                This whole‑brain engagement triggers a cascade of neurochemical events — dopamine
+                This whole‑brain engagement triggers a cascade of neurochemical events: dopamine
                 supports motivation and reward‑based learning, BDNF and other growth factors support
                 structural changes that persist, acetylcholine helps gate when plasticity can occur,
                 and norepinephrine shapes arousal and focus during learning. The Cognichord models

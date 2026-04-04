@@ -17,7 +17,7 @@ function sd(arr: number[]): number {
 }
 
 function fmt(v: number | null, decimals = 1): string {
-  if (v == null) return '—';
+  if (v == null) return 'N/A';
   return v.toFixed(decimals);
 }
 
@@ -149,7 +149,7 @@ export default function CumulativeStats() {
     : metrics.avgAffectChange >= 0 ? '#10B981' : '#ef4444';
 
   const affectStr = metrics.avgAffectChange == null
-    ? '—'
+    ? ', '
     : `${metrics.avgAffectChange >= 0 ? '+' : ''}${metrics.avgAffectChange.toFixed(2)}`;
 
   if (sessions.length === 0) {
@@ -212,7 +212,7 @@ export default function CumulativeStats() {
           <div className="mb-3">
             <h4 className="text-sm font-semibold text-slate-200">Pre vs Post-Session Mood</h4>
             <p className="text-xs text-slate-500">
-              Affect trajectory across sessions — does practice improve your mood?
+              Affect trajectory across sessions: does practice improve your mood?
               Scale 1 (very low) to 7 (very high).
             </p>
           </div>
@@ -265,7 +265,7 @@ export default function CumulativeStats() {
         <div className="sim-panel">
           <h4 className="text-sm font-semibold text-slate-200 mb-1">Session Quality</h4>
           <p className="text-xs text-slate-500 mb-3">
-            Focus and perceived progress per session (most recent 20) — 1–5 scale
+            Focus and perceived progress per session (most recent 20), 1–5 scale
           </p>
           <ResponsiveContainer width="100%" height={130}>
             <BarChart data={qualityData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
@@ -322,9 +322,9 @@ export default function CumulativeStats() {
           />
         </div>
         <div className="flex justify-between text-xs text-slate-600 mt-1.5">
-          <span>0% — Sporadic</span>
-          <span>50% — Regular</span>
-          <span>100% — Daily</span>
+          <span>0% (sporadic)</span>
+          <span>50% (regular)</span>
+          <span>100% (daily)</span>
         </div>
       </div>
 
@@ -385,15 +385,15 @@ export default function CumulativeStats() {
                     ].map((row, i) => (
                       <tr key={i}>
                         <td className="py-1.5 text-slate-400">{row.label}</td>
-                        <td className="py-1.5 text-right font-mono text-slate-300">{row.m ?? '—'}</td>
-                        <td className="py-1.5 text-right font-mono text-slate-500">{row.sd ?? '—'}</td>
+                        <td className="py-1.5 text-right font-mono text-slate-300">{row.m ?? 'N/A'}</td>
+                        <td className="py-1.5 text-right font-mono text-slate-500">{row.sd ?? 'N/A'}</td>
                         <td className="py-1.5 text-right text-slate-600">{row.scale}</td>
                       </tr>
                     ))}
                     <tr>
                       <td className="py-1.5 text-slate-400">Full flow rate</td>
                       <td className="py-1.5 text-right font-mono text-slate-300">{research.flowPct}%</td>
-                      <td className="py-1.5 text-right font-mono text-slate-500">—</td>
+                      <td className="py-1.5 text-right font-mono text-slate-500">N/A</td>
                       <td className="py-1.5 text-right text-slate-600">flowState = 3</td>
                     </tr>
                   </tbody>

@@ -38,10 +38,9 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.2 }}
-          className="text-slate-300 text-xl sm:text-2xl leading-relaxed max-w-2xl mx-auto mb-3 font-light"
+          className="text-slate-300 text-lg sm:text-xl leading-relaxed max-w-2xl mx-auto mb-3"
         >
-          You practice music.{' '}
-          <span className="text-cyan-light font-normal">Your brain changes.</span>
+          Explore what practicing music does to your brain.
         </motion.p>
 
         <motion.p
@@ -50,8 +49,9 @@ export default function HeroSection() {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="text-slate-500 text-base sm:text-lg mb-10 max-w-xl mx-auto leading-relaxed"
         >
-          We model exactly how — and show you what your practice history
-          means for your neuroscience.
+          Four neuroscience-inspired computational models run in real time on musical parameters.
+          Log your practice sessions and see what the models predict about your dopamine, BDNF,
+          and synaptic plasticity.
         </motion.p>
 
         <motion.div

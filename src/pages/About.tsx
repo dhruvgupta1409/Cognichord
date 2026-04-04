@@ -71,8 +71,8 @@ export default function About() {
           <p className="text-slate-400 text-base max-w-3xl leading-relaxed">
             Cognichord is a unique platform where music meets molecular neuroscience.
             Every simulation is inspired by peer‑reviewed biochemistry and systems‑neuroscience
-            research—models of synaptic dynamics, neurotrophic factor kinetics, and cortical
-            oscillation entrainment—and is built as a hypothesis‑generating tool rather than a
+            research, including models of synaptic dynamics, neurotrophic factor kinetics, and cortical
+            oscillation entrainment, and is built as a hypothesis‑generating tool rather than a
             direct implementation of measured biophysical constants. Where the literature is
             uncertain or mixed, we treat the models as explicit, testable proposals.
           </p>
@@ -236,7 +236,7 @@ export default function About() {
           <div className="sim-panel">
             <h3 className="font-display font-semibold text-slate-200 mb-4">Technical Implementation</h3>
             <p className="text-sm text-slate-400 leading-relaxed mb-4">
-              All simulations run entirely in the browser via TypeScript — no server‑side
+              All simulations run entirely in the browser via TypeScript with no server‑side
               computation required. The mathematical models are implemented as pure functions
               with deterministic seeded noise for reproducibility. Numerical integration uses
               explicit Euler with adaptive time‑stepping appropriate for the timescales involved
@@ -264,7 +264,7 @@ export default function About() {
                 <div key={i} className="flex gap-2.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-slate-600 flex-shrink-0 mt-1.5" />
                   <div>
-                    <span className="text-sm text-slate-300 font-medium">{item.title} — </span>
+                    <span className="text-sm text-slate-300 font-medium">{item.title} : </span>
                     <span className="text-sm text-slate-500">{item.desc}</span>
                   </div>
                 </div>

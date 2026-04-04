@@ -172,7 +172,7 @@ export default function BDNFSimulator() {
               exit={{ opacity: 0, height: 0 }}
               className="pt-4 border-t border-cyan/15 space-y-4"
             >
-              <p className="text-xs text-cyan font-semibold">Scenario B — same instrument &amp; complexity</p>
+              <p className="text-xs text-cyan font-semibold">Scenario B with same instrument &amp; complexity</p>
 
               <div>
                 <div className="flex items-center justify-between mb-2">
@@ -267,7 +267,7 @@ export default function BDNFSimulator() {
         </div>
       </div>
 
-      {/* NPI Comparison chart — only visible in compare mode */}
+      {/* NPI Comparison chart, only visible in compare mode */}
       {comparing && compareResult && (
         <motion.div
           initial={{ opacity: 0, y: 8 }}
@@ -276,7 +276,7 @@ export default function BDNFSimulator() {
         >
           <div className="flex items-center justify-between mb-3">
             <div>
-              <h4 className="text-sm font-semibold text-slate-200">Neuroplasticity Index — Schedule Comparison</h4>
+              <h4 className="text-sm font-semibold text-slate-200">Neuroplasticity Index, Schedule Comparison</h4>
               <p className="text-xs text-slate-500">
                 A: {params.frequencyPerWeek}×/week · {params.sessionDurationMin} min &nbsp;|&nbsp;
                 B: {compareFreq}×/week · {compareDuration} min
@@ -313,9 +313,9 @@ export default function BDNFSimulator() {
             </span>
             <span className="text-xs text-slate-400">
               {npiGain > 0
-                ? `Schedule B reaches NPI ${compareResult.finalNPI.toFixed(1)} vs. ${result.finalNPI.toFixed(1)} — ${Math.round((npiGain / result.finalNPI) * 100)}% higher at week ${params.totalWeeks}`
+                ? `Schedule B reaches NPI ${compareResult.finalNPI.toFixed(1)} vs. ${result.finalNPI.toFixed(1)}, ${Math.round((npiGain / result.finalNPI) * 100)}% higher at week ${params.totalWeeks}`
                 : npiGain < 0
-                ? `Schedule A is more effective — NPI ${result.finalNPI.toFixed(1)} vs. ${compareResult.finalNPI.toFixed(1)}`
+                ? `Schedule A is more effective, NPI ${result.finalNPI.toFixed(1)} vs. ${compareResult.finalNPI.toFixed(1)}`
                 : 'Both schedules produce equivalent neuroplasticity at this timeframe'}
             </span>
           </div>
@@ -398,11 +398,11 @@ export default function BDNFSimulator() {
           />
         </div>
         <div className="flex justify-between text-xs text-slate-600 mt-1.5">
-          <span>0 — Untrained</span>
+          <span>0 (Untrained)</span>
           <span className="text-slate-500">
             Density gain: <span className="text-emerald-light">+{result.densityGain.toFixed(1)}%</span>
           </span>
-          <span>100 — Expert</span>
+          <span>100 (Expert)</span>
         </div>
       </div>
 

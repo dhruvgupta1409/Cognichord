@@ -15,15 +15,15 @@
 //
 //  2. Research ethics
 //     In any legitimate research study, participants must provide informed consent
-//     before their data is collected or shared — even anonymously. A checkbox
+//     before their data is collected or shared, even anonymously. A checkbox
 //     toggle on a website does not constitute adequate informed consent, especially
 //     for minors. IRB/ethics board approval would be required before sharing
 //     real participant data publicly.
 //
 //  3. Sensitive self-report data
 //     Mood (1–7), anxiety (1–5), frustration, and flow state are personal,
-//     health-adjacent measurements. Displaying them publicly — even without
-//     names — is inappropriate for a general-audience tool used by young people.
+//     health-adjacent measurements. Displaying them publicly, even without
+//     names, is inappropriate for a general-audience tool used by young people.
 //
 // CURRENT BEHAVIOUR
 // ─────────────────

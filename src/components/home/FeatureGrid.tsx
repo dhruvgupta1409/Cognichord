@@ -1,34 +1,47 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Atom, TrendingUp, BookOpen, ArrowRight } from 'lucide-react';
+import { Zap, Dna, BookOpen, BarChart2, Microscope, Activity, ArrowRight } from 'lucide-react';
 
-const features = [
+const pages = [
   {
-    icon:      Atom,
+    icon:      Zap,
     color:     'cyan',
-    tag:       'Simulation Lab',
-    title:     'Four Interconnected Models',
-    desc:      'Dopamine reward, BDNF neuroplasticity, synaptic plasticity, and neural oscillations — all driven by your musical parameters in real time. Change a tempo or instrument and watch the neuroscience respond.',
-    link:      '/lab',
+    name:      'Simulation Lab',
+    path:      '/lab',
+    desc:      'Four live simulators covering dopamine reward dynamics, BDNF neuroplasticity, BCM synaptic plasticity, and neural oscillation entrainment. Adjust musical parameters with sliders and watch each model respond in real time.',
     linkLabel: 'Open Lab',
   },
   {
-    icon:      TrendingUp,
+    icon:      Dna,
     color:     'emerald',
-    tag:       'Your Practice',
-    title:     'Neural Impact from Real Sessions',
-    desc:      'Log your practice sessions and the models run on your actual data. See your BDNF trajectory built from your history, your LTP threshold today, and how one more session per week changes your 8-week projection.',
-    link:      '/dashboard',
+    name:      'Practice Dashboard',
+    path:      '/dashboard',
+    desc:      'Log practice sessions with self-reported mood, focus, and flow state. Once you have sessions, the dashboard runs the BDNF and dopamine models on your actual data and shows a neural impact analysis alongside your session history.',
     linkLabel: 'Track Sessions',
   },
   {
     icon:      BookOpen,
     color:     'gold',
-    tag:       'The Science',
-    title:     'Mechanisms Behind the Models',
-    desc:      'From mesolimbic reward circuits to NMDA-dependent LTP and theta-gamma coupling — understand the peer-reviewed science each model is grounded in, with honest notes on what is literature-supported and what is a modelling assumption.',
-    link:      '/learn',
+    name:      'Learn',
+    path:      '/learn',
+    desc:      'Read about the neuroscience behind the simulations. Covers mesolimbic reward pathways, activity-dependent BDNF release, BCM plasticity rules, and theta-gamma coupling, with citations to peer-reviewed literature.',
     linkLabel: 'Explore Science',
+  },
+  {
+    icon:      BarChart2,
+    color:     'purple',
+    name:      'Model Explorer',
+    path:      '/research',
+    desc:      'See how practice parameters affect model predictions. Charts sweep across frequency, session duration, complexity, and instrument, showing the range of outputs the models produce. Clearly labeled as model outputs, not empirical data.',
+    linkLabel: 'Explore Parameters',
+  },
+  {
+    icon:      Microscope,
+    color:     'pink',
+    name:      'About',
+    path:      '/about',
+    desc:      'Read the equations, assumptions, and literature sources behind each simulation. Includes explicit notes on which parameter values are empirically grounded and which are modeling choices, along with a full tech stack breakdown.',
+    linkLabel: 'See Methods',
   },
 ];
 
@@ -36,6 +49,8 @@ const colorMap: Record<string, { border: string; bg: string; text: string; tag: 
   cyan:   { border: 'border-cyan/20 hover:border-cyan/40',      bg: 'bg-cyan/10',    text: 'text-cyan',         tag: 'tag-cyan'   },
   emerald:{ border: 'border-emerald/20 hover:border-emerald/40', bg: 'bg-emerald/10', text: 'text-emerald-light', tag: 'tag-emerald' },
   gold:   { border: 'border-gold/20 hover:border-gold/40',      bg: 'bg-gold/10',    text: 'text-gold-light',   tag: 'tag-gold'   },
+  purple: { border: 'border-purple/20 hover:border-purple/40',  bg: 'bg-purple/10',  text: 'text-purple-light', tag: 'tag-purple' },
+  pink:   { border: 'border-pink/20 hover:border-pink/40',      bg: 'bg-pink/10',    text: 'text-pink-light',   tag: 'tag-pink'   },
 };
 
 const stats = [
@@ -55,19 +70,19 @@ export default function FeatureGrid() {
         transition={{ duration: 0.5 }}
         className="text-center mb-16"
       >
-        <span className="section-label justify-center">What Cognichord Does</span>
+        <span className="section-label justify-center">What's here</span>
         <h2 className="font-display font-bold text-3xl sm:text-4xl text-slate-100 mb-4">
-          One Cohesive Platform —<br />
-          <span className="gradient-text">Not Four Separate Tools</span>
+          Five pages,{' '}
+          <span className="gradient-text">each with a purpose</span>
         </h2>
         <p className="text-slate-500 text-base max-w-xl mx-auto">
-          Your logged practice sessions feed directly into the simulators.
-          The BDNF model talks to the plasticity model. Every number has a source.
-          Every chart connects to the same underlying story.
+          Cognichord is built around four neuroscience-inspired computational models,
+          a personal practice tracker, and a library of educational content.
+          Each page below has a specific role. Start anywhere that interests you.
         </p>
       </motion.div>
 
-      {/* Stats */}
+      {/* Stats row */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -85,37 +100,34 @@ export default function FeatureGrid() {
         ))}
       </motion.div>
 
-      {/* 3 Feature cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {features.map((f, i) => {
-          const Icon = f.icon;
-          const c = colorMap[f.color] ?? colorMap.cyan;
+      {/* Page links grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {pages.map((p, i) => {
+          const Icon = p.icon;
+          const c = colorMap[p.color] ?? colorMap.cyan;
           return (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: i * 0.08 }}
+              transition={{ duration: 0.4, delay: i * 0.07 }}
               className={`card-glass card-glass-hover rounded-xl p-6 border ${c.border} transition-all duration-300 flex flex-col`}
             >
-              <div className="flex items-start justify-between mb-5">
-                <div className={`w-10 h-10 rounded-lg ${c.bg} flex items-center justify-center`}>
-                  <Icon className={`w-5 h-5 ${c.text}`} />
-                </div>
-                <span className={`tag ${c.tag}`}>{f.tag}</span>
+              <div className={`w-9 h-9 rounded-lg ${c.bg} flex items-center justify-center mb-4`}>
+                <Icon className={`w-4.5 h-4.5 ${c.text}`} />
               </div>
-              <h3 className="font-display font-semibold text-slate-100 text-base mb-2.5 leading-snug">
-                {f.title}
+              <h3 className="font-display font-semibold text-slate-100 text-base mb-2">
+                {p.name}
               </h3>
               <p className="text-slate-500 text-sm leading-relaxed flex-1 mb-5">
-                {f.desc}
+                {p.desc}
               </p>
               <Link
-                to={f.link}
+                to={p.path}
                 className={`flex items-center gap-1.5 text-sm font-medium ${c.text} hover:gap-2.5 transition-all`}
               >
-                {f.linkLabel} <ArrowRight className="w-3.5 h-3.5" />
+                {p.linkLabel} <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </motion.div>
           );

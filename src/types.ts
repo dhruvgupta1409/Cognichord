@@ -11,7 +11,7 @@ export type TimeOfDay = 'morning' | 'afternoon' | 'evening' | 'night';
 export type PracticeContext = 'alone' | 'teacher' | 'group';
 export type GoalsMet = 'yes' | 'partial' | 'no';
 
-// ─── Simulator model types (unchanged — used in Lab page) ────────────────────
+// ─── Simulator model types (unchanged, used in Lab page) ────────────────────
 
 export interface DopamineParams {
   bpm: number;
@@ -90,7 +90,7 @@ export interface PlasticityResult {
   ltdEvents: number;
   potentiationPercent: number;
   plasticityIndex: number;
-  /** θ_M at session start — BDNF-adjusted when bdnfLevel is provided */
+  /** θ_M at session start, BDNF-adjusted when bdnfLevel is provided */
   initialThreshold: number;
 }
 

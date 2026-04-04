@@ -139,7 +139,7 @@ export default function Dashboard() {
         >
           <Lock className="w-4 h-4 text-emerald flex-shrink-0" />
           <p className="text-xs text-slate-500 leading-relaxed">
-            <strong className="text-slate-400">100% Local Storage — Data never leaves your device.</strong>{' '}
+            <strong className="text-slate-400">100% Local Storage. Data never leaves your device.</strong>{' '}
             All session data is stored only in your browser's local storage and is never transmitted to
             any server or third party. You can export it as CSV or JSON at any time.
             Visit the{' '}

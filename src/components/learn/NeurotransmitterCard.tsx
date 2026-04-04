@@ -26,7 +26,7 @@ export const NEUROTRANSMITTERS: Neurotransmitter[] = [
     function: 'Synaptic plasticity, neuron survival, LTP facilitation, neurogenesis',
     musicalRole: 'BDNF is a key molecular mediator of long‑term neuroplasticity. Intensive practice, particularly when it involves complex sensorimotor learning and attention, likely recruits many of the same activity‑dependent signaling cascades through which BDNF supports dendritic growth, spine stability, and synaptic strengthening. Direct measurements of BDNF before and after purely musical training in humans are limited; the Cognichord model treats BDNF as a plausible mechanism through which musical practice could support structural brain changes.',
     brainRegions: ['Hippocampus', 'Cerebral Cortex', 'Cerebellum', 'Basal Ganglia'],
-    halfLife: 'Varies by compartment — free BDNF in plasma is cleared on the order of minutes; tissue levels change on much longer timescales and are influenced by transcription, translation, release, and uptake dynamics.',
+    halfLife: 'Varies by compartment: free BDNF in plasma is cleared on the order of minutes; tissue levels change on much longer timescales and are influenced by transcription, translation, release, and uptake dynamics.',
     keyPathway: 'TrkB receptor → PI3K/Akt → MAPK/CREB/mTOR signaling',
     insight: 'BDNF has been called "Miracle‑Gro for the brain" in popular writing because of its central role in plasticity. Musicians often show advantages in verbal memory, auditory processing, and some executive functions; BDNF‑mediated plasticity is a leading mechanistic candidate, but direct comparisons of hippocampal BDNF levels between musicians and non‑musicians have not yet been firmly established in humans.',
   },

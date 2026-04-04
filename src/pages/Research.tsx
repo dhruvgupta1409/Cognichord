@@ -36,7 +36,7 @@ function sweepDuration() {
 }
 
 function sweepComplexity() {
-  const labels = ['1 — Beginner', '2', '3 — Moderate', '4', '5 — Virtuoso'];
+  const labels = ['1 (Beginner)', '2', '3 (Moderate)', '4', '5 (Virtuoso)'];
   return [1, 2, 3, 4, 5].map((c, i) => {
     const r = simulateBDNF({ ...BASE, complexity: c });
     const d = simulateDopamine({ bpm: 120, mode: 'major', sessionDurationMin: 45, complexity: c, novelty: 0.7, practiceFrequency: 4 });
@@ -103,7 +103,7 @@ export default function Research() {
           <p className="text-slate-500 text-base max-w-2xl">
             Each chart below sweeps one practice variable while holding others fixed,
             showing how our computational models respond. These are{' '}
-            <span className="text-slate-300 font-medium">model predictions</span> — not
+            <span className="text-slate-300 font-medium">model predictions</span>, not
             empirical data from human participants. Use them to build intuition about
             the models, then{' '}
             <Link to="/lab" className="text-cyan hover:text-cyan-light underline underline-offset-2 transition-colors">
@@ -126,7 +126,7 @@ export default function Research() {
         >
           <Info className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" />
           <p className="text-sm text-slate-400 leading-relaxed">
-            <span className="text-gold font-semibold">Model Explorer — not a research database.</span>{' '}
+            <span className="text-gold font-semibold">Model Explorer: not a research database.</span>{' '}
             All values here are outputs from our BDNF and dopamine computational models
             run across parameter ranges. No human participant data is displayed or aggregated.
             Default parameters: piano, 45-minute sessions, complexity 3, 4×/week, 8-week horizon.
@@ -165,7 +165,7 @@ export default function Research() {
                 </BarChart>
               </ResponsiveContainer>
               <p className="text-xs text-slate-600 mt-2">
-                NPI is highly sensitive to frequency — daily practice nearly doubles the 8-week gain vs. once weekly in this model.
+                NPI is highly sensitive to frequency. Daily practice nearly doubles the 8-week gain vs. once weekly in this model.
               </p>
             </motion.div>
 
@@ -194,7 +194,7 @@ export default function Research() {
                 </BarChart>
               </ResponsiveContainer>
               <p className="text-xs text-slate-600 mt-2">
-                Duration effects follow a log function — going from 15→45 min matters more than 60→120 min in this model.
+                Duration effects follow a log function. Going from 15→45 min matters more than 60→120 min in this model.
               </p>
             </motion.div>
           </div>
@@ -258,7 +258,7 @@ export default function Research() {
                 </BarChart>
               </ResponsiveContainer>
               <p className="text-xs text-slate-600 mt-2">
-                Instrument differences reflect qualitative motor demand scaling from musician-brain literature — no single instrument's BDNF is fit to a specific dataset.
+                Instrument differences reflect qualitative motor demand scaling from musician-brain literature; no single instrument's BDNF is fit to a specific dataset.
               </p>
             </motion.div>
           </div>
@@ -274,7 +274,7 @@ export default function Research() {
             <div className="flex items-center gap-2 mb-1">
               <Layers className="w-4 h-4 text-purple-light" />
               <h3 className="text-sm font-semibold text-slate-200">
-                Long-Term NPI Trajectories — Frequency Comparison
+                Long-Term NPI Trajectories by Frequency
               </h3>
             </div>
             <p className="text-xs text-slate-500 mb-4">
@@ -294,7 +294,7 @@ export default function Research() {
             </ResponsiveContainer>
             <p className="text-xs text-slate-600 mt-2">
               The model shows diminishing returns at high frequency as BDNF approaches its ceiling (×2.2 baseline).
-              The gap between 2× and 4× is larger than between 4× and 7× — suggesting moderate consistency beats sporadic intensity in this model.
+              The gap between 2× and 4× is larger than between 4× and 7×, suggesting moderate consistency beats sporadic intensity in this model.
             </p>
           </motion.div>
 
@@ -319,7 +319,7 @@ export default function Research() {
           </h3>
           <p className="text-slate-500 text-sm mb-5 max-w-md mx-auto">
             Once you've logged practice sessions, the Dashboard's Neural Impact panel
-            runs these models on your actual data — showing your real BDNF trajectory,
+            runs these models on your actual data, showing your real BDNF trajectory,
             reward index, and LTP threshold, plus an 8-week projection.
           </p>
           <div className="flex items-center justify-center gap-3 flex-wrap">

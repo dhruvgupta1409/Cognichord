@@ -230,7 +230,7 @@ export default function NeuralImpact({ sessions }: Props) {
           </div>
           <div className="text-xs text-purple-light/70">
             {thetaShiftPct > 0
-              ? `↓${thetaShiftPct}% — wider plasticity window`
+              ? `↓${thetaShiftPct}%, wider plasticity window`
               : 'at baseline (no BDNF elevation)'}
           </div>
         </div>
@@ -240,7 +240,7 @@ export default function NeuralImpact({ sessions }: Props) {
       <div className="sim-panel">
         <div className="flex items-center justify-between mb-3">
           <div>
-            <h4 className="text-sm font-semibold text-slate-200">BDNF Trajectory — Your Practice History</h4>
+            <h4 className="text-sm font-semibold text-slate-200">BDNF Trajectory from Your Practice History</h4>
             <p className="text-xs text-slate-500">
               Estimated serum BDNF built from your {byDate.length} logged sessions ·{' '}
               gold dots mark practice days
@@ -301,7 +301,7 @@ export default function NeuralImpact({ sessions }: Props) {
               8-Week Projection
             </h4>
             <p className="text-xs text-slate-500">
-              Neuroplasticity Index — current pace vs. one more session per week
+              Neuroplasticity Index: current pace vs. one more session per week
             </p>
           </div>
           <span className="tag tag-purple flex items-center gap-1">
@@ -363,8 +363,8 @@ export default function NeuralImpact({ sessions }: Props) {
             <p className="text-xs text-slate-400 leading-relaxed">
               Adding one session per week would raise your NPI from{' '}
               <span className="text-purple-light font-mono">{projectionCurrent.finalNPI.toFixed(1)}</span> to{' '}
-              <span className="text-cyan font-mono">{projectionPlus.finalNPI.toFixed(1)}</span> at week 8
-              {' '}— a <span className="text-cyan font-semibold">+{npiDeltaPct}% gain</span> in neuroplasticity index
+              <span className="text-cyan font-mono">{projectionPlus.finalNPI.toFixed(1)}</span> at week 8,
+              a <span className="text-cyan font-semibold">+{npiDeltaPct}% gain</span> in neuroplasticity index
               with the same session format.
             </p>
           </div>
@@ -390,14 +390,14 @@ export default function NeuralImpact({ sessions }: Props) {
                   NMDA receptor conductance and lowers the Ca²⁺ threshold required to trigger LTP.
                   In BCM terms, this shifts your modification threshold θ_M from{' '}
                   <span className="font-mono text-slate-300">0.40</span> down to{' '}
-                  <span className="font-mono text-purple-light">{theta_m.toFixed(3)}</span>{' '}
-                  — a <span className="text-purple-light font-semibold">{thetaShiftPct}% reduction</span>.
+                  <span className="font-mono text-purple-light">{theta_m.toFixed(3)}</span>,
+                  a <span className="text-purple-light font-semibold">{thetaShiftPct}% reduction</span>.
                   Your synapses are more receptive to long-term change right now than when you started.
                 </>
               ) : (
                 <>
                   With only a few sessions logged, your estimated BDNF is near baseline ({currentBDNF.toFixed(1)} a.u.).
-                  As you build consistency, BDNF elevation will lower your BCM modification threshold θ_M —
+                  As you build consistency, BDNF elevation will lower your BCM modification threshold θ_M,
                   making LTP progressively easier to achieve. This is the compounding return of
                   consistent practice: the biology gets more receptive over time.
                 </>
