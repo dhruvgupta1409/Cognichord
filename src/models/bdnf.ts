@@ -51,7 +51,7 @@ function neuroplasticityIndex(bdnf: number, sessionsToDate: number): number {
   const bdnfExcess = Math.max(0, (bdnf - BDNF_BASELINE) / BDNF_BASELINE);
   const expPart = 40 * (1 - Math.exp(-0.08 * sessionsToDate));
   const signal  = bdnfExcess * 90 + expPart;
-  const npi = 100 * Math.exp(-4.605 * Math.exp(-0.0347 * signal));
+  const npi = 100 * Math.exp(-5000 * Math.exp(-0.075 * signal));
   return parseFloat(npi.toFixed(1));
 }
 
