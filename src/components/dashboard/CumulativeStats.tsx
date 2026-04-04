@@ -10,8 +10,6 @@ import {
 } from 'lucide-react';
 import { usePracticeStore } from '../../store/practiceStore';
 
-// ─── helpers ─────────────────────────────────────────────────────────────────
-
 function sd(arr: number[]): number {
   if (arr.length < 2) return 0;
   const m = arr.reduce((a, b) => a + b, 0) / arr.length;
@@ -30,8 +28,6 @@ function downloadText(content: string, filename: string, mime: string) {
   a.click();
   URL.revokeObjectURL(url);
 }
-
-// ─── stat card ───────────────────────────────────────────────────────────────
 
 interface StatCardProps {
   label: string;
@@ -64,8 +60,6 @@ function StatCard({ label, value, unit, color, Icon, missing }: StatCardProps) {
   );
 }
 
-// ─── main component ───────────────────────────────────────────────────────────
-
 export default function CumulativeStats() {
   const allSessions  = usePracticeStore(s => s.sessions);
   const currentUserId = usePracticeStore(s => s.currentUserId);
@@ -80,7 +74,6 @@ export default function CumulativeStats() {
 
   const metrics = getMetrics();
 
-  // ── mood trajectory (sessions with both pre/post mood) ────────────────────
   const moodData = useMemo(() =>
     [...sessions]
       .filter(s => s.preMood != null && s.postMood != null)
@@ -95,9 +88,9 @@ export default function CumulativeStats() {
     [sessions]
   );
 
-  // ── quality bars (focus + progress per recent session) ───────────────────
   const qualityData = useMemo(() =>
     [...sessions]
+      .filter(s => s.sessionFocus != null || s.perceivedProgress != null)
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
       .slice(-20)
       .map((s, i) => ({
@@ -105,12 +98,10 @@ export default function CumulativeStats() {
         focus:    s.sessionFocus    ?? 0,
         progress: s.perceivedProgress ?? 0,
         duration: s.durationMin,
-        hasSelf:  s.sessionFocus != null,
       })),
     [sessions]
   );
 
-  // ── research summary stats ────────────────────────────────────────────────
   const research = useMemo(() => {
     const full = sessions.filter(s =>
       s.preMood != null && s.postMood != null &&
@@ -153,7 +144,6 @@ export default function CumulativeStats() {
     };
   }, [sessions]);
 
-  // ── affect change sign helper ─────────────────────────────────────────────
   const affectColor = metrics.avgAffectChange == null
     ? '#475569'
     : metrics.avgAffectChange >= 0 ? '#10B981' : '#ef4444';
@@ -175,7 +165,6 @@ export default function CumulativeStats() {
   return (
     <div className="space-y-5">
 
-      {/* ── stat cards ──────────────────────────────────────────────────────── */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
           {
@@ -218,7 +207,6 @@ export default function CumulativeStats() {
         ))}
       </div>
 
-      {/* ── mood trajectory chart ────────────────────────────────────────────── */}
       {moodData.length >= 2 ? (
         <div className="sim-panel">
           <div className="mb-3">
@@ -273,42 +261,49 @@ export default function CumulativeStats() {
         </div>
       )}
 
-      {/* ── session quality bars ─────────────────────────────────────────────── */}
-      <div className="sim-panel">
-        <h4 className="text-sm font-semibold text-slate-200 mb-1">Session Quality</h4>
-        <p className="text-xs text-slate-500 mb-3">
-          Focus and perceived progress per session (most recent 20) — 1–5 scale
-        </p>
-        <ResponsiveContainer width="100%" height={130}>
-          <BarChart data={qualityData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
-            <XAxis dataKey="label" tick={{ fill: '#475569', fontSize: 9 }} tickLine={false} />
-            <YAxis domain={[0, 5]} ticks={[0, 1, 2, 3, 4, 5]}
-              tick={{ fill: '#475569', fontSize: 9 }} tickLine={false} />
-            <Tooltip
-              contentStyle={{ background: '#07111e', border: '1px solid rgba(0,212,255,0.2)', borderRadius: 8, fontSize: 10 }}
-              formatter={(v: number, name: string) => [
-                v === 0 ? 'not logged' : `${v}/5`,
-                name === 'focus' ? 'Focus' : 'Progress',
-              ]}
-            />
-            <Bar dataKey="focus"    fill="rgba(0,212,255,0.6)"  name="focus"    radius={[2, 2, 0, 0]} />
-            <Bar dataKey="progress" fill="rgba(16,185,129,0.6)" name="progress" radius={[2, 2, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-        <div className="flex gap-5 mt-2 text-[10px] text-slate-500">
-          <span className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-sm inline-block" style={{ background: 'rgba(0,212,255,0.6)' }} />
-            Focus
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-3 h-3 rounded-sm inline-block" style={{ background: 'rgba(16,185,129,0.6)' }} />
-            Perceived Progress
-          </span>
+      {qualityData.length > 0 ? (
+        <div className="sim-panel">
+          <h4 className="text-sm font-semibold text-slate-200 mb-1">Session Quality</h4>
+          <p className="text-xs text-slate-500 mb-3">
+            Focus and perceived progress per session (most recent 20) — 1–5 scale
+          </p>
+          <ResponsiveContainer width="100%" height={130}>
+            <BarChart data={qualityData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
+              <XAxis dataKey="label" tick={{ fill: '#475569', fontSize: 9 }} tickLine={false} />
+              <YAxis domain={[1, 5]} ticks={[1, 2, 3, 4, 5]}
+                tick={{ fill: '#475569', fontSize: 9 }} tickLine={false} />
+              <Tooltip
+                contentStyle={{ background: '#07111e', border: '1px solid rgba(0,212,255,0.2)', borderRadius: 8, fontSize: 10 }}
+                formatter={(v: number, name: string) => [
+                  `${v}/5`,
+                  name === 'focus' ? 'Focus' : 'Progress',
+                ]}
+              />
+              <Bar dataKey="focus"    fill="rgba(0,212,255,0.6)"  name="focus"    radius={[2, 2, 0, 0]} />
+              <Bar dataKey="progress" fill="rgba(16,185,129,0.6)" name="progress" radius={[2, 2, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+          <div className="flex gap-5 mt-2 text-[10px] text-slate-500">
+            <span className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded-sm inline-block" style={{ background: 'rgba(0,212,255,0.6)' }} />
+              Focus
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded-sm inline-block" style={{ background: 'rgba(16,185,129,0.6)' }} />
+              Perceived Progress
+            </span>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="sim-panel border border-dashed border-white/[0.06]">
+          <h4 className="text-sm font-semibold text-slate-400 mb-1">Session Quality</h4>
+          <p className="text-xs text-slate-600">
+            Log focus or perceived progress in at least 1 session to see quality bars.
+          </p>
+        </div>
+      )}
 
-      {/* ── practice consistency bar ─────────────────────────────────────────── */}
       <div className="sim-panel">
         <div className="flex items-center justify-between mb-3">
           <div>
@@ -333,7 +328,6 @@ export default function CumulativeStats() {
         </div>
       </div>
 
-      {/* ── research summary (expandable) ────────────────────────────────────── */}
       <div className="sim-panel">
         <button
           onClick={() => setShowResearch(v => !v)}
@@ -415,7 +409,6 @@ export default function CumulativeStats() {
         )}
       </div>
 
-      {/* ── export buttons ────────────────────────────────────────────────────── */}
       <div className="sim-panel">
         <h4 className="text-sm font-semibold text-slate-200 mb-1">Export Your Data</h4>
         <p className="text-xs text-slate-500 mb-3">

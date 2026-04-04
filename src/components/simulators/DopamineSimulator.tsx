@@ -61,7 +61,7 @@ export default function DopamineSimulator() {
   const metrics = [
     { label: 'Peak DA', value: `×${result.peakDA.toFixed(3)}`, color: '#00D4FF', icon: TrendingUp, unit: 'baseline' },
     { label: 'Mean DA', value: `×${result.meanDA.toFixed(3)}`, color: '#8B5CF6', icon: Activity, unit: 'baseline' },
-    { label: 'Reward Index', value: result.rewardIndex.toFixed(1), color: '#F59E0B', icon: Zap, unit: '/ 100' },
+    { label: 'Reward Index (Simulated)', value: result.rewardIndex.toFixed(1), color: '#F59E0B', icon: Zap, unit: '/ 100' },
     { label: 'DA Effective Decay', value: `${result.dopamineHalfLife}`, color: '#10B981', icon: Clock, unit: 'min' },
   ];
 

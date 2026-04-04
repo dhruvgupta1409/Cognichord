@@ -1,36 +1,36 @@
 import type { BDNFParams, BDNFPoint, BDNFResult } from '../types';
 
 const instrumentMotorFactor: Record<string, number> = {
-  piano:          1.35,
-  organ:          1.32,
-  harpsichord:    1.28,
-  synthesizer:    1.05,
-  violin:         1.40,
-  viola:          1.38,
-  cello:          1.33,
-  'double bass':  1.20,
-  guitar:         1.20,
-  'classical guitar': 1.28,
-  bass:           1.05,
-  harp:           1.38,
-  ukulele:        1.08,
-  banjo:          1.15,
-  mandolin:       1.22,
-  flute:          1.28,
-  clarinet:       1.25,
-  oboe:           1.32,
-  bassoon:        1.28,
-  saxophone:      1.20,
-  trumpet:        1.18,
-  trombone:       1.15,
-  'french horn':  1.26,
-  tuba:           1.10,
-  drums:          1.15,
-  marimba:        1.25,
-  voice:          0.90,
+  drums:          1.22,
+  organ:          1.20,
+  piano:          1.18,
+  marimba:        1.17,
+  harp:           1.17,
+  synthesizer:    1.15,
+  harpsichord:    1.14,
+  violin:         1.15,
+  viola:          1.14,
+  cello:          1.13,
+  'classical guitar': 1.13,
+  flute:          1.12,
+  saxophone:      1.12,
+  oboe:           1.12,
+  'french horn':  1.11,
+  'double bass':  1.11,
+  guitar:         1.11,
+  mandolin:       1.10,
+  bassoon:        1.10,
+  clarinet:       1.09,
+  trumpet:        1.08,
+  banjo:          1.08,
+  trombone:       1.07,
+  bass:           1.06,
+  tuba:           1.05,
+  ukulele:        1.04,
+  voice:          1.10,
 };
 
-const BDNF_HALF_LIFE_DAYS = 1.5;
+const BDNF_HALF_LIFE_DAYS = 3.0;
 const DECAY_CONSTANT = Math.LN2 / BDNF_HALF_LIFE_DAYS;
 const BDNF_BASELINE = 100;
 const SESSION_MAX_DELTA = 32;
@@ -43,14 +43,16 @@ function sessionBDNFDelta(
   const durationFactor = 1.2 * Math.log1p(durationMin / 25);
   const complexityFactor = 0.5 + (complexity / 5) * 1.2;
   const motorFactor = instrumentMotorFactor[instrument] ?? 1.0;
-  const rawDelta = durationFactor * complexityFactor * motorFactor * 8.5;
+  const rawDelta = durationFactor * complexityFactor * motorFactor * 11;
   return Math.min(SESSION_MAX_DELTA, rawDelta);
 }
 
 function neuroplasticityIndex(bdnf: number, sessionsToDate: number): number {
-  const bdnfComponent = Math.min(60, ((bdnf - BDNF_BASELINE) / BDNF_BASELINE) * 120);
-  const experienceComponent = Math.min(40, sessionsToDate * 1.2);
-  return Math.max(0, parseFloat((bdnfComponent + experienceComponent).toFixed(1)));
+  const bdnfExcess = Math.max(0, (bdnf - BDNF_BASELINE) / BDNF_BASELINE);
+  const expPart = 40 * (1 - Math.exp(-0.08 * sessionsToDate));
+  const signal  = bdnfExcess * 90 + expPart;
+  const npi = 100 * Math.exp(-4.605 * Math.exp(-0.0347 * signal));
+  return parseFloat(npi.toFixed(1));
 }
 
 function synapticDensity(accumulatedBDNF: number, baseline: number): number {
@@ -86,7 +88,7 @@ export function simulateBDNF(params: BDNFParams): BDNFResult {
   const trajectory: BDNFPoint[] = [];
 
   for (let day = 0; day < totalDays; day++) {
-    bdnf *= Math.exp(-DECAY_CONSTANT);
+    bdnf = BDNF_BASELINE + (bdnf - BDNF_BASELINE) * Math.exp(-DECAY_CONSTANT);
 
     const hasPractice = practiceDays.has(day);
 
@@ -101,7 +103,7 @@ export function simulateBDNF(params: BDNFParams): BDNFResult {
       bdnf += 0.8;
     }
 
-    bdnf = Math.max(BDNF_BASELINE * 0.8, Math.min(BDNF_BASELINE * 2.2, bdnf));
+    bdnf = Math.min(BDNF_BASELINE * 2.2, bdnf);
 
     trajectory.push({
       day,

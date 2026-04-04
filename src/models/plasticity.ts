@@ -8,14 +8,6 @@ const rhythmFrequencies: Record<string, number> = {
   polyrhythm:  4.2,
 };
 
-const rhythmAmplitudes: Record<string, number> = {
-  steady:      1.0,
-  syncopated:  1.15,
-  triplet:     1.2,
-  complex:     1.3,
-  polyrhythm:  1.45,
-};
-
 function seededRNG(seed: number) {
   let s = (seed * 1664525 + 1013904223) >>> 0;
   return () => {
@@ -42,8 +34,7 @@ export function simulatePlasticity(params: PlasticityParams): PlasticityResult {
   );
 
   const baseFreq  = rhythmFrequencies[rhythmPattern] ?? 1.5;
-  const baseAmp   = rhythmAmplitudes[rhythmPattern] ?? 1.0;
-  const ampScale  = (stimulationAmplitude / 3) * baseAmp;
+  const ampScale  = stimulationAmplitude / 3;
 
   const dt_sec    = 0.2;
   const totalSec  = sessionDurationMin * 60;

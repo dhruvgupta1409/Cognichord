@@ -74,14 +74,15 @@ export function simulateDopamine(params: DopamineParams): DopamineResult {
     let phasicSum = 0;
     for (const ev of eventTimes) {
       const delta = time - ev;
-      if (delta >= 0 && delta < 12) {
+      if (delta < 0) break;
+      if (delta < 12) {
         const burstAmp = novelty * habituation * bpmFactor * (0.8 + 0.5 * rng());
         phasicSum += burstAmp * Math.exp(-delta / tauReuptake);
       }
     }
 
     const rpe = (phasicSum > 0)
-      ? phasicSum * (1 - 0.6 * (time / sessionDurationMin))
+      ? phasicSum * Math.exp(-Math.LN2 / 60 * time)
       : 0;
 
     const noise = 0.04 * (rng() - 0.5) * 2;
@@ -100,7 +101,9 @@ export function simulateDopamine(params: DopamineParams): DopamineResult {
   const daValues = trace.map(p => p.dopamine);
   const peakDA   = parseFloat(Math.max(...daValues).toFixed(3));
   const meanDA   = parseFloat((daValues.reduce((a, b) => a + b, 0) / daValues.length).toFixed(3));
-  const rewardIndex = parseFloat(((peakDA * meanDA * novelty * bpmFactor * 20)).toFixed(1));
+
+  const rawReward   = peakDA * meanDA * novelty * bpmFactor * 20;
+  const rewardIndex = parseFloat((100 / (1 + Math.exp(-(rawReward - 40) / 15))).toFixed(1));
 
   const summary = buildSummary(peakDA, meanDA, bpmFactor, mode, complexity);
 
@@ -108,7 +111,7 @@ export function simulateDopamine(params: DopamineParams): DopamineResult {
     trace,
     peakDA,
     meanDA,
-    rewardIndex: Math.min(100, rewardIndex),
+    rewardIndex,
     dopamineHalfLife: parseFloat(tauReuptake.toFixed(1)),
     sessionSummary: summary,
   };

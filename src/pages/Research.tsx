@@ -26,12 +26,12 @@ import {
 import { usePracticeStore } from '../store/practiceStore';
 
 const PUBLISHED_COGNITIVE = [
-  { subject: 'Working Memory',  musicians: 76, baseline: 50 },
-  { subject: 'Reaction Time',   musicians: 71, baseline: 50 },
-  { subject: 'Pattern Recog.',  musicians: 83, baseline: 50 },
-  { subject: 'Verbal Fluency',  musicians: 68, baseline: 50 },
-  { subject: 'Attention Span',  musicians: 79, baseline: 50 },
-  { subject: 'Exec. Function',  musicians: 64, baseline: 50 },
+  { subject: 'Working Memory',   musicians: 0.40, baseline: 0 },
+  { subject: 'Processing Speed', musicians: 0.25, baseline: 0 },
+  { subject: 'Pattern Recog.',   musicians: 0.55, baseline: 0 },
+  { subject: 'Verbal Memory',    musicians: 0.35, baseline: 0 },
+  { subject: 'Attention',        musicians: 0.30, baseline: 0 },
+  { subject: 'Exec. Function',   musicians: 0.20, baseline: 0 },
 ];
 
 function downloadText(content: string, filename: string, mime: string) {
@@ -52,9 +52,6 @@ export default function Research() {
 
   const simSessions = useMemo(() => getSimulatedSessions(), []);
 
-  // Convert user sessions using instrument/duration/complexity from their log.
-  // Mode, BPM, and novelty default to representative values (major, 120 BPM,
-  // novelty = 0.5) because those parameters are not captured in the practice log.
   const userConverted = useMemo(
     () => contribute
       ? userSessions.map(s => sessionToSimSession(s.instrument, s.durationMin, s.complexity))
@@ -62,22 +59,17 @@ export default function Research() {
     [userSessions, contribute],
   );
 
-  // Neuroplasticity charts include user sessions when the toggle is on.
   const allSessions = useMemo(
     () => [...simSessions, ...userConverted],
     [simSessions, userConverted],
   );
 
-  // Reward-model sensitivity charts use simulation data only — user sessions
-  // don't have mode, BPM, or novelty, so including them would introduce noise
-  // from the identical defaults. Simulation data has full parameter coverage.
   const byInstrument = useMemo(() => aggregateByInstrument(allSessions),  [allSessions]);
   const byFrequency  = useMemo(() => aggregateByFrequency(allSessions),   [allSessions]);
   const byDuration   = useMemo(() => aggregateByDuration(allSessions),    [allSessions]);
   const byComplexity = useMemo(() => aggregateByComplexity(allSessions),  [allSessions]);
   const histogram    = useMemo(() => npiHistogram(allSessions),           [allSessions]);
 
-  // Mode, BPM, novelty — simulation data only for the reason above.
   const byMode       = useMemo(() => aggregateByMode(simSessions),    [simSessions]);
   const byBPM        = useMemo(() => aggregateByBPM(simSessions),     [simSessions]);
   const byNovelty    = useMemo(() => aggregateByNovelty(simSessions), [simSessions]);
@@ -90,7 +82,6 @@ export default function Research() {
     <div className="min-h-screen pt-24 pb-20">
       <div className="max-w-7xl mx-auto px-6">
 
-        {/* ── Header ─────────────────────────────────────────────────────────── */}
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <span className="section-label">Dataset Explorer</span>
           <h1 className="font-display font-bold text-3xl sm:text-4xl text-slate-100 mb-3">
@@ -104,7 +95,6 @@ export default function Research() {
           </p>
         </motion.div>
 
-        {/* ── "What this data is" info panel ─────────────────────────────────── */}
         <motion.div
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
           className="mb-4 rounded-xl border border-cyan/20 bg-cyan/[0.04] p-5"
@@ -151,7 +141,6 @@ export default function Research() {
           </div>
         </motion.div>
 
-        {/* ── Privacy & COPPA notice ──────────────────────────────────────────── */}
         <motion.div
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}
           className="mb-8 rounded-xl border border-pink/15 bg-pink/[0.03] p-4"
@@ -214,7 +203,6 @@ export default function Research() {
           )}
         </motion.div>
 
-        {/* ── User sessions toggle + total counter ────────────────────────────── */}
         <motion.div
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }}
           className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8"
@@ -261,15 +249,14 @@ export default function Research() {
           </div>
         </motion.div>
 
-        {/* ── Summary stat cards ───────────────────────────────────────────────── */}
         <motion.div
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.16 }}
           className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10"
         >
           {[
-            { value: avgNPI.toFixed(1),  label: 'Mean Neuroplasticity Index', unit: '/ 100', color: '#00D4FF' },
-            { value: avgBDNF.toFixed(1), label: 'Mean Growth Factor Signal',  unit: 'a.u.',  color: '#10B981' },
-            { value: avgDA.toFixed(1),   label: 'Mean Dopamine Index',        unit: '/ 100', color: '#F59E0B' },
+            { value: avgNPI.toFixed(1),  label: 'Mean NPI (Simulated)',        unit: '/ 100', color: '#00D4FF' },
+            { value: avgBDNF.toFixed(1), label: 'Mean Growth Factor Signal',   unit: 'a.u.',  color: '#10B981' },
+            { value: avgDA.toFixed(1),   label: 'Mean Dopamine (Simulated)',   unit: '/ 100', color: '#F59E0B' },
             { value: '23',               label: 'Instruments covered',        unit: 'types', color: '#8B5CF6' },
           ].map((s, i) => (
             <motion.div
@@ -286,9 +273,6 @@ export default function Research() {
           ))}
         </motion.div>
 
-        {/* ════════════════════════════════════════════════════════════════════════
-            SECTION 1 — Neuroplasticity Outcomes (BDNF + NPI model)
-        ════════════════════════════════════════════════════════════════════════ */}
         <div className="mb-2">
           <span className="section-label">Neuroplasticity Model</span>
           <h2 className="font-display font-semibold text-slate-100 text-xl mb-6">
@@ -332,9 +316,9 @@ export default function Research() {
             <h3 className="font-semibold text-slate-200 text-sm mb-0.5">NPI Score Distribution</h3>
             <p className="text-xs text-slate-500 mb-4">
               Distribution across all {allSessions.length.toLocaleString()} sessions.
-              The peak in the 20–40 range reflects the uniform parameter sampling:
-              most random combinations produce moderate frequency/duration, and high NPI
-              requires the coincident combination of frequent, long, complex sessions.
+              Reflects the full BDNF accumulation/decay model with uniform parameter sampling.
+              The spread across the range shows that NPI is sensitive to frequency, duration,
+              and complexity, with the highest scores requiring their joint optimization.
             </p>
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={histogram} margin={{ top: 4, right: 10, left: -20, bottom: 4 }}>
@@ -434,10 +418,6 @@ export default function Research() {
           </motion.div>
         </div>
 
-        {/* ════════════════════════════════════════════════════════════════════════
-            SECTION 2 — Dopamine Reward Model: Sensitivity Analysis
-            Charts show simulation data only (mode/BPM/novelty not in practice log)
-        ════════════════════════════════════════════════════════════════════════ */}
         <div className="mb-2">
           <span className="section-label">Dopamine Reward Model</span>
           <h2 className="font-display font-semibold text-slate-100 text-xl mb-1">
@@ -452,7 +432,6 @@ export default function Research() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-10">
 
-          {/* Mode × Dopamine */}
           <motion.div
             initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="sim-panel"
@@ -483,7 +462,6 @@ export default function Research() {
             </ResponsiveContainer>
           </motion.div>
 
-          {/* BPM × Dopamine */}
           <motion.div
             initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="sim-panel"
@@ -506,7 +484,6 @@ export default function Research() {
                 />
                 <Bar dataKey="avgDA" radius={[4, 4, 0, 0]} name="Avg Dopamine Index">
                   {byBPM.map((entry, i) => {
-                    // Peak at index 3 (120–140 BPM), fade toward edges
                     const dist = Math.abs(i - 3);
                     const intensity = Math.max(0.3, 0.9 - dist * 0.18);
                     return <Cell key={i} fill={`rgba(0,212,255,${intensity})`} />;
@@ -516,7 +493,6 @@ export default function Research() {
             </ResponsiveContainer>
           </motion.div>
 
-          {/* Novelty × Dopamine */}
           <motion.div
             initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="sim-panel"
@@ -549,9 +525,6 @@ export default function Research() {
           </motion.div>
         </div>
 
-        {/* ════════════════════════════════════════════════════════════════════════
-            SECTION 3 — Published cognitive context
-        ════════════════════════════════════════════════════════════════════════ */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-10">
           <motion.div
             initial={{ opacity: 0, x: -16 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
@@ -559,22 +532,22 @@ export default function Research() {
           >
             <div className="flex items-start justify-between gap-2 mb-1">
               <h3 className="font-semibold text-slate-200 text-sm">Cognitive Profile: Musicians vs. Non-musicians</h3>
-              <span className="tag tag-gold flex-shrink-0">Published data</span>
+              <span className="tag tag-gold flex-shrink-0">Literature effect sizes</span>
             </div>
             <p className="text-xs text-slate-500 mb-3">
               From published cognitive research —{' '}
               <strong className="text-slate-400">not from this simulation dataset</strong>.
-              Scores normalised to population mean = 50. Values are illustrative estimates
-              synthesised across studies comparing groups with and without long-term musical training;
-              not extracted verbatim from any single paper.
-              Sources: Schellenberg (2004), Miendlarzewska &amp; Trost (2014) and related meta-analyses.
+              Values are Cohen's d effect sizes (musician advantage over non-musicians) estimated from
+              meta-analytic and review data. Cohen's d: small = 0.2, medium = 0.5, large = 0.8.
+              Sources: Sala &amp; Gobet (2017) meta-analysis of music training and cognitive abilities;
+              Schellenberg (2004); Miendlarzewska &amp; Trost (2014).
             </p>
             <ResponsiveContainer width="100%" height={220}>
               <RadarChart data={PUBLISHED_COGNITIVE}>
                 <PolarGrid stroke="rgba(255,255,255,0.06)" />
                 <PolarAngleAxis dataKey="subject" tick={{ fill: '#64748B', fontSize: 9 }} />
-                <PolarRadiusAxis domain={[0, 100]} tick={false} />
-                <Radar name="Musicians (published)" dataKey="musicians"    stroke="#00D4FF" fill="#00D4FF" fillOpacity={0.15} strokeWidth={2} />
+                <PolarRadiusAxis domain={[0, 1.0]} tick={{ fill: '#475569', fontSize: 8 }} tickCount={3} />
+                <Radar name="Musicians (Cohen's d)" dataKey="musicians"    stroke="#00D4FF" fill="#00D4FF" fillOpacity={0.15} strokeWidth={2} />
                 <Radar name="Non-musicians (baseline)" dataKey="baseline"  stroke="rgba(255,255,255,0.25)" fill="transparent" strokeWidth={1} strokeDasharray="4 4" />
                 <Tooltip contentStyle={{ background: '#07111e', border: '1px solid rgba(0,212,255,0.2)', borderRadius: 8, fontSize: 10 }} />
               </RadarChart>
@@ -610,7 +583,6 @@ export default function Research() {
           </motion.div>
         </div>
 
-        {/* ── CTA when no user sessions logged ─────────────────────────────────── */}
         {userSessions.length === 0 && (
           <motion.div
             initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}

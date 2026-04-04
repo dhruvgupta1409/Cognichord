@@ -52,7 +52,7 @@ export default function BDNFSimulator() {
   );
 
   const metrics = [
-    { label: 'Final NPI',       value: result.finalNPI.toFixed(1),  unit: '/ 100',   color: '#10B981', icon: TrendingUp },
+    { label: 'Final NPI (Model Est.)', value: result.finalNPI.toFixed(1),  unit: '/ 100',   color: '#10B981', icon: TrendingUp },
     { label: 'Peak BDNF',       value: result.peakBDNF.toFixed(1),  unit: 'a.u.',    color: '#00D4FF', icon: Dna       },
     { label: 'Avg BDNF',        value: result.averageBDNF.toFixed(1),unit: 'a.u.',   color: '#8B5CF6', icon: Layers    },
     { label: 'Density Gain',    value: `+${result.densityGain.toFixed(1)}`, unit: '%', color: '#F59E0B', icon: Calendar },
