@@ -101,10 +101,12 @@ export default function FeatureGrid() {
       </motion.div>
 
       {/* Page links grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-5">
         {pages.map((p, i) => {
           const Icon = p.icon;
           const c = colorMap[p.color] ?? colorMap.cyan;
+          // First 3 cards: span 2 cols each (2×3=6). Last 2: span 3 cols each, centered.
+          const spanClass = i < 3 ? 'lg:col-span-2' : 'lg:col-span-3';
           return (
             <motion.div
               key={i}
@@ -112,7 +114,7 @@ export default function FeatureGrid() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.07 }}
-              className={`card-glass card-glass-hover rounded-xl p-6 border ${c.border} transition-all duration-300 flex flex-col${i === 3 ? ' lg:col-start-2' : ''}`}
+              className={`card-glass card-glass-hover rounded-xl p-6 border ${c.border} transition-all duration-300 flex flex-col ${spanClass}`}
             >
               <div className={`w-9 h-9 rounded-lg ${c.bg} flex items-center justify-center mb-4`}>
                 <Icon className={`w-4.5 h-4.5 ${c.text}`} />
