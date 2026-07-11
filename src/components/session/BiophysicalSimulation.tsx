@@ -124,6 +124,9 @@ export default function BiophysicalSimulation({ params, sessionLabel }: { params
           </motion.div>
           <p className="text-sm text-slate-300 mt-3">Integrating the network in Brian2...</p>
           <p className="text-[11px] text-slate-500 mt-1">Solving conductance and gating ODEs across {params.repetitions} rehearsal trials · {elapsed.toFixed(1)}s</p>
+          {elapsed > 8 && (
+            <p className="text-[11px] text-slate-500 mt-1 max-w-xs">The free simulation server may be waking up — the first run after a quiet period can take up to a minute.</p>
+          )}
         </div>
       )}
 

@@ -10,6 +10,8 @@ app = FastAPI(title="CogniChord Neuro-Simulation API", version="1.0")
 
 app.add_middleware(
     CORSMiddleware,
+    # the live GitHub Pages site (origin = scheme + host, no path) + any localhost port for dev
+    allow_origins=["https://dhruvgupta1409.github.io"],
     allow_origin_regex=r"http://(localhost|127\.0\.0\.1)(:\d+)?",
     allow_methods=["*"],
     allow_headers=["*"],

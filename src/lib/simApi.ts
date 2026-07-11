@@ -49,7 +49,7 @@ export async function checkSimHealth(timeoutMs = 2500): Promise<boolean> {
   }
 }
 
-export async function runSimulation(params: SimParams, timeoutMs = 45000): Promise<SimResult> {
+export async function runSimulation(params: SimParams, timeoutMs = 120000): Promise<SimResult> {
   const ctrl = new AbortController();
   const to = setTimeout(() => ctrl.abort(), timeoutMs);
   let res: Response;
