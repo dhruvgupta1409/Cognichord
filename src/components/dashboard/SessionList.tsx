@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trash2, Music, Clock, Calendar, ChevronDown } from 'lucide-react';
-import { usePracticeStore } from '../../store/practiceStore';
+import { usePracticeStore, selectMySessions } from '../../store/practiceStore';
 import type { PracticeSession } from '../../types';
 import { useState } from 'react';
 
@@ -33,10 +33,8 @@ export default function SessionList() {
   const allSessions = usePracticeStore(s => s.sessions);
   const currentUserId = usePracticeStore(s => s.currentUserId);
   const removeSession = usePracticeStore(s => s.removeSession);
+  const sessions = selectMySessions(allSessions, currentUserId);
 
-  const sessions = currentUserId
-    ? allSessions.filter(s => s.userId === currentUserId)
-    : [];
   const [expanded, setExpanded] = useState<string | null>(null);
   const [showAll, setShowAll] = useState(false);
 

@@ -4,12 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, FlaskConical } from 'lucide-react';
 
 const navItems = [
-  { path: '/',          label: 'Home'       },
-  { path: '/lab',       label: 'Lab'        },
-  { path: '/dashboard', label: 'Dashboard'  },
-  { path: '/learn',     label: 'Learn'      },
-  { path: '/research',  label: 'Explore'    },
-  { path: '/about',     label: 'About'      },
+  { path: '/',         label: 'Explore'  },
+  { path: '/practice', label: 'Practice' },
+  { path: '/learn',    label: 'Learn'    },
 ];
 
 export default function Header() {
@@ -61,8 +58,8 @@ export default function Header() {
         </nav>
 
                 <div className="hidden md:flex items-center gap-3">
-          <Link to="/lab" className="btn-primary text-xs py-2 px-4">
-            Open Lab
+          <Link to="/practice" className="btn-primary text-xs py-2 px-4">
+            Log a session
           </Link>
         </div>
 
@@ -99,8 +96,8 @@ export default function Header() {
                 </Link>
               ))}
               <div className="pt-2 border-t border-white/[0.06]">
-                <Link to="/lab" className="btn-primary block text-center text-sm py-2.5 mt-2">
-                  Open Lab
+                <Link to="/practice" className="btn-primary block text-center text-sm py-2.5 mt-2">
+                  Log a session
                 </Link>
               </div>
             </nav>

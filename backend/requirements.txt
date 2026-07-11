@@ -1,0 +1,5 @@
+# Pinned to an ABI-consistent, Python-3.9-compatible set (numpy 2.x + Brian2 wheels clash on 3.9).
+numpy==1.26.4
+brian2==2.5.4
+fastapi==0.128.8
+uvicorn[standard]==0.39.0

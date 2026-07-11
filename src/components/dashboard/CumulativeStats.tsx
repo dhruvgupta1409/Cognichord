@@ -8,7 +8,7 @@ import {
   TrendingUp, Clock, Calendar, Brain, Activity, Flame, Target,
   CheckCircle, Download, ChevronDown,
 } from 'lucide-react';
-import { usePracticeStore } from '../../store/practiceStore';
+import { usePracticeStore, selectMySessions } from '../../store/practiceStore';
 
 function sd(arr: number[]): number {
   if (arr.length < 2) return 0;
@@ -68,9 +68,7 @@ export default function CumulativeStats() {
   const exportJSON   = usePracticeStore(s => s.exportJSON);
   const [showResearch, setShowResearch] = useState(false);
 
-  const sessions = currentUserId
-    ? allSessions.filter(s => s.userId === currentUserId)
-    : [];
+  const sessions = selectMySessions(allSessions, currentUserId);
 
   const metrics = getMetrics();
 
@@ -212,8 +210,7 @@ export default function CumulativeStats() {
           <div className="mb-3">
             <h4 className="text-sm font-semibold text-slate-200">Pre vs Post-Session Mood</h4>
             <p className="text-xs text-slate-500">
-              Affect trajectory across sessions: does practice improve your mood?
-              Scale 1 (very low) to 7 (very high).
+              Mood before and after each session, on a scale from 1 (very low) to 7 (very high). This shows whether practice tends to improve your mood.
             </p>
           </div>
           <ResponsiveContainer width="100%" height={160}>
@@ -256,7 +253,7 @@ export default function CumulativeStats() {
         <div className="sim-panel border border-dashed border-white/[0.06]">
           <h4 className="text-sm font-semibold text-slate-400 mb-1">Pre vs Post-Session Mood</h4>
           <p className="text-xs text-slate-600">
-            Log mood in at least 2 sessions to see your affect trajectory.
+            Log mood in at least 2 sessions to see your mood trajectory.
           </p>
         </div>
       )}
@@ -265,7 +262,7 @@ export default function CumulativeStats() {
         <div className="sim-panel">
           <h4 className="text-sm font-semibold text-slate-200 mb-1">Session Quality</h4>
           <p className="text-xs text-slate-500 mb-3">
-            Focus and perceived progress per session (most recent 20), 1–5 scale
+            Focus and perceived progress per session (most recent 20), on a 1–5 scale
           </p>
           <ResponsiveContainer width="100%" height={130}>
             <BarChart data={qualityData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
@@ -308,7 +305,7 @@ export default function CumulativeStats() {
         <div className="flex items-center justify-between mb-3">
           <div>
             <span className="text-sm font-semibold text-slate-200">Practice Consistency</span>
-            <p className="text-xs text-slate-500 mt-0.5">% of calendar weeks containing ≥1 session</p>
+            <p className="text-xs text-slate-500 mt-0.5">% of calendar weeks containing at least 1 session</p>
           </div>
           <span className="font-mono text-emerald text-lg">{metrics.consistencyScore}%</span>
         </div>
@@ -352,9 +349,7 @@ export default function CumulativeStats() {
             ) : (
               <>
                 <p className="text-[10px] text-slate-600 leading-relaxed">
-                  Values below are computed from N={research.n} sessions with complete self-report measures
-                  (preMood, postMood, sessionFocus, perceivedProgress). Suitable for reporting in a research paper as
-                  participant-level descriptive statistics.
+                  Values below are computed from N={research.n} sessions with complete self-report measures (preMood, postMood, sessionFocus, perceivedProgress). These are suitable for reporting in a research paper as participant-level descriptive statistics.
                 </p>
                 <table className="w-full text-xs">
                   <thead>
@@ -400,8 +395,7 @@ export default function CumulativeStats() {
                 </table>
 
                 <p className="text-[10px] text-slate-600 leading-relaxed mt-2">
-                  All measures are single-item Likert-style self-reports collected immediately after each session.
-                  Affect change (Δmood) = postMood − preMood; positive values indicate practice-associated mood improvement.
+                  All measures are single-item Likert-style self-reports collected immediately after each session. Affect change (Δmood) = postMood − preMood; positive values indicate a practice-associated improvement in mood.
                 </p>
               </>
             )}

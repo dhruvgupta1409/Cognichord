@@ -5,16 +5,19 @@ import type { PracticeSession, CumulativeMetrics } from '../types';
 interface PracticeStore {
   sessions: PracticeSession[];
   currentUserId: string;
-  contributeToResearch: boolean;
+  lastLoggedAt: number;
 
-  addSession: (session: Omit<PracticeSession, 'id' | 'userId'>) => void;
+  addSession: (session: Omit<PracticeSession, 'id' | 'userId'>) => PracticeSession;
   removeSession: (id: string) => void;
   clearSessions: () => void;
   setUserId: (id: string) => void;
-  setContributeToResearch: (v: boolean) => void;
   getMetrics: () => CumulativeMetrics;
   exportJSON: () => string;
   exportCSV: () => string;
+}
+
+export function selectMySessions(sessions: PracticeSession[], currentUserId: string): PracticeSession[] {
+  return sessions.filter(s => !s.userId || s.userId === currentUserId);
 }
 
 function mean(arr: number[]): number {
@@ -30,7 +33,6 @@ function computeConsistencyScore(sessions: PracticeSession[]): number {
   const weeksWithPractice = new Set<string>();
   for (const s of sessions) {
     const d = new Date(s.date);
-    // ISO-like week key: year + week-of-year
     const dayOfYear = Math.floor((d.getTime() - new Date(d.getFullYear(), 0, 0).getTime()) / 86400000);
     const weekNum = Math.ceil(dayOfYear / 7);
     weeksWithPractice.add(`${d.getFullYear()}-W${weekNum}`);
@@ -57,7 +59,6 @@ function computeMetrics(sessions: PracticeSession[]): CumulativeMetrics {
   const spanWeeks  = Math.max(1, spanDays / 7);
   const weeklyFrequency = parseFloat((totalSessions / spanWeeks).toFixed(1));
 
-  // ── Streak ────────────────────────────────────────────────────────────────
   const sessionDates = new Set(sessions.map(s => s.date.split('T')[0]));
   const today = new Date();
   let streakDays = 0;
@@ -84,7 +85,6 @@ function computeMetrics(sessions: PracticeSession[]): CumulativeMetrics {
 
   const consistencyScore = computeConsistencyScore(sessions);
 
-  // ── Self-report metrics (null when <3 sessions have the field) ─────────────
   const MIN_N = 3;
 
   const withMoods       = sessions.filter(s => s.preMood != null && s.postMood != null);
@@ -178,16 +178,18 @@ export const usePracticeStore = create<PracticeStore>()(
   persist(
     (set, get) => ({
       sessions: [],
-      currentUserId: '',
-      contributeToResearch: false,
+      currentUserId: 'me',
+      lastLoggedAt: 0,
 
       addSession: (session) => {
         const id = `session_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
         const userId = get().currentUserId;
-        const fullSession = { ...session, id, userId };
+        const fullSession: PracticeSession = { ...session, id, userId };
         set(state => ({
           sessions: [fullSession, ...state.sessions],
+          lastLoggedAt: Date.now(),
         }));
+        return fullSession;
       },
 
       removeSession: (id) => {
@@ -197,34 +199,23 @@ export const usePracticeStore = create<PracticeStore>()(
       clearSessions: () => {
         const uid = get().currentUserId;
         set(state => ({
-          sessions: uid
-            ? state.sessions.filter(s => s.userId !== uid)
-            : [],
+          sessions: state.sessions.filter(s => s.userId && s.userId !== uid),
         }));
       },
 
-      setUserId: (id) => set({ currentUserId: id.trim() }),
-
-      setContributeToResearch: (v) => set({ contributeToResearch: v }),
+      setUserId: (id) => set({ currentUserId: id.trim() || 'me' }),
 
       getMetrics: () => {
         const { sessions, currentUserId } = get();
-        const mine = currentUserId
-          ? sessions.filter(s => s.userId === currentUserId)
-          : sessions;
-        return computeMetrics(mine);
+        return computeMetrics(selectMySessions(sessions, currentUserId));
       },
-
       exportJSON: () => {
         const { sessions, currentUserId } = get();
-        const mine = currentUserId ? sessions.filter(s => s.userId === currentUserId) : sessions;
-        return JSON.stringify(mine, null, 2);
+        return JSON.stringify(selectMySessions(sessions, currentUserId), null, 2);
       },
-
       exportCSV: () => {
         const { sessions, currentUserId } = get();
-        const mine = currentUserId ? sessions.filter(s => s.userId === currentUserId) : sessions;
-        return toCSV(mine);
+        return toCSV(selectMySessions(sessions, currentUserId));
       },
     }),
     {
@@ -233,7 +224,6 @@ export const usePracticeStore = create<PracticeStore>()(
       partialize: (state) => ({
         sessions: state.sessions,
         currentUserId: state.currentUserId,
-        contributeToResearch: state.contributeToResearch,
       }),
     }
   )

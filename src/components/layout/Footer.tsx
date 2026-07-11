@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FlaskConical, Github, ExternalLink } from 'lucide-react';
+import { FlaskConical } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -17,23 +17,21 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-slate-500 text-sm leading-relaxed max-w-xs">
-              Computational models linking musical activity to neurotransmitter dynamics,
-              synaptic plasticity, and long-term cognitive performance.
+              Understand how your brain learns while you practice, using an interactive brain built from cited neuroscience.
             </p>
             <div className="flex items-center gap-3 mt-5">
-              <span className="tag tag-cyan">Research Platform</span>
+              <span className="tag tag-cyan">Interactive Neuroscience</span>
               <span className="tag tag-purple">Open Science</span>
             </div>
           </div>
 
                     <div>
-            <h4 className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">Platform</h4>
+            <h4 className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">Explore</h4>
             <ul className="space-y-2.5">
               {[
-                { to: '/lab', label: 'Simulation Lab' },
-                { to: '/dashboard', label: 'Practice Dashboard' },
-                { to: '/research', label: 'Community Research' },
-                { to: '/learn', label: 'Education Hub' },
+                { to: '/',         label: 'The Brain'    },
+                { to: '/practice', label: 'Practice'     },
+                { to: '/learn',    label: 'Learn'        },
               ].map(link => (
                 <li key={link.to}>
                   <Link to={link.to} className="text-sm text-slate-500 hover:text-cyan transition-colors">
@@ -45,15 +43,13 @@ export default function Footer() {
           </div>
 
                     <div>
-            <h4 className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">Science</h4>
+            <h4 className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">About</h4>
             <ul className="space-y-2.5">
               {[
-                { to: '/learn#dopamine',   label: 'Dopamine Dynamics'  },
-                { to: '/learn#bdnf',       label: 'BDNF & Plasticity'  },
-                { to: '/learn#synaptic',   label: 'Synaptic Models'    },
-                { to: '/about',            label: 'Methodology'        },
-              ].map(link => (
-                <li key={link.to}>
+                { to: '/about',          label: 'Methodology & model' },
+                { to: '/about#credits',  label: 'Data sources & credits' },
+              ].map((link, i) => (
+                <li key={i}>
                   <Link to={link.to} className="text-sm text-slate-500 hover:text-cyan transition-colors">
                     {link.label}
                   </Link>
@@ -65,26 +61,15 @@ export default function Footer() {
 
         <div className="divider-glow my-8" />
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-slate-600">
-            © 2025 Cognichord. Computational models are approximations for research and educational purposes and should not be used as medical devices.
-          </p>
-          <div className="flex items-center gap-4">
-            <a
-              href="#"
-              className="text-slate-600 hover:text-slate-400 transition-colors"
-              aria-label="GitHub"
-            >
-              <Github className="w-4 h-4" />
-            </a>
-            <a
-              href="#"
-              className="flex items-center gap-1 text-xs text-slate-600 hover:text-cyan transition-colors"
-            >
-              Preprint <ExternalLink className="w-3 h-3" />
-            </a>
-          </div>
-        </div>
+        <p className="text-xs text-slate-600 text-center sm:text-left">
+          © 2026 CogniChord · built by Dhruv Gupta. An educational, non-clinical tool — not a medical device.
+          {' '}The 3D brain is a general representation (not anatomically exact), derived from open
+          neuroscience datasets — FreeSurfer, Harvard-Oxford, AAL, and NeuroMorpho.org — used under their
+          licenses. Full{' '}
+          <Link to="/about#credits" className="hover:text-cyan transition-colors underline underline-offset-2">
+            data sources &amp; credits
+          </Link>.
+        </p>
       </div>
     </footer>
   );

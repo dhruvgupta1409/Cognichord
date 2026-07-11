@@ -32,7 +32,7 @@ export default function PathwayDiagram() {
     <div className="sim-panel">
       <h3 className="font-display font-semibold text-slate-200 mb-1">Mesolimbic Pathway</h3>
       <p className="text-xs text-slate-500 mb-4">
-        Neural circuits activated by music practice: dopaminergic reward, memory consolidation, motor plasticity, memory consolidation, motor plasticity
+        Neural circuits activated by music practice: dopaminergic reward, memory consolidation, and motor plasticity.
       </p>
 
       <div className="overflow-x-auto">

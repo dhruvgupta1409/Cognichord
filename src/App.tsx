@@ -1,13 +1,13 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Suspense, lazy } from 'react';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
-import Home from './pages/Home';
-import Lab from './pages/Lab';
-import Dashboard from './pages/Dashboard';
-import Learn from './pages/Learn';
-import Research from './pages/Research';
-import About from './pages/About';
+
+const Explore  = lazy(() => import('./pages/Explore'));
+const Practice = lazy(() => import('./pages/Practice'));
+const Learn    = lazy(() => import('./pages/Learn'));
+const About    = lazy(() => import('./pages/About'));
 
 export default function App() {
   const location = useLocation();
@@ -16,16 +16,22 @@ export default function App() {
     <div className="min-h-screen flex flex-col">
       <Header />
       <main className="flex-1">
-        <AnimatePresence mode="wait">
-          <Routes location={location} key={location.pathname}>
-            <Route path="/"          element={<Home />}      />
-            <Route path="/lab"       element={<Lab />}       />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/learn"     element={<Learn />}     />
-            <Route path="/research"  element={<Research />}  />
-            <Route path="/about"     element={<About />}     />
-          </Routes>
-        </AnimatePresence>
+        <Suspense fallback={<div className="min-h-screen" />}>
+          <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+              <Route path="/"          element={<Explore />}  />
+              <Route path="/practice"  element={<Practice />} />
+              <Route path="/learn"     element={<Learn />}    />
+              <Route path="/about"     element={<About />}    />
+
+              <Route path="/home"      element={<Navigate to="/" replace />} />
+              <Route path="/dashboard" element={<Navigate to="/practice" replace />} />
+              <Route path="/lab"       element={<Navigate to="/practice" replace />} />
+              <Route path="/research"  element={<Navigate to="/learn" replace />} />
+              <Route path="*"          element={<Navigate to="/" replace />} />
+            </Routes>
+          </AnimatePresence>
+        </Suspense>
       </main>
       <Footer />
     </div>
