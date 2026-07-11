@@ -213,15 +213,15 @@ export default function MusicBrain({ open, onClose }: { open: boolean; onClose: 
             </div>
           </div>
 
-          <div className="flex-1 relative min-h-0">
-            <div className="absolute inset-0">
+          <div className="flex-1 relative min-h-0 max-lg:flex max-lg:flex-col max-lg:overflow-y-auto">
+            <div className={`absolute inset-0 max-lg:static max-lg:h-[42vh] max-lg:flex-shrink-0 max-lg:order-1 ${showScience ? 'max-lg:hidden' : ''}`}>
               {open && <MusicJourney ref={journeyRef} paused={!open || !playing} chapter={lesson} />}
             </div>
 
-            <button onClick={() => navLesson(-1)} title="Previous (←)" className="absolute left-[356px] top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border border-white/15 bg-black/50 text-slate-200 hover:bg-black/70 backdrop-blur flex items-center justify-center"><ChevronLeft className="w-5 h-5" /></button>
-            <button onClick={() => navLesson(1)} title="Next (→)" className="absolute right-[290px] top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border border-white/15 bg-black/50 text-slate-200 hover:bg-black/70 backdrop-blur flex items-center justify-center"><ChevronRight className="w-5 h-5" /></button>
+            <button onClick={() => navLesson(-1)} title="Previous (←)" className="absolute left-[356px] top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border border-white/15 bg-black/50 text-slate-200 hover:bg-black/70 backdrop-blur flex items-center justify-center max-lg:hidden"><ChevronLeft className="w-5 h-5" /></button>
+            <button onClick={() => navLesson(1)} title="Next (→)" className="absolute right-[290px] top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full border border-white/15 bg-black/50 text-slate-200 hover:bg-black/70 backdrop-blur flex items-center justify-center max-lg:hidden"><ChevronRight className="w-5 h-5" /></button>
 
-            <div className="absolute top-4 left-5 z-10 w-[340px] max-w-[38vw] max-h-[calc(100vh-260px)] overflow-y-auto pr-1">
+            <div className="absolute top-4 left-5 z-10 w-[340px] max-w-[38vw] max-h-[calc(100vh-260px)] overflow-y-auto pr-1 max-lg:static max-lg:top-auto max-lg:left-auto max-lg:w-full max-lg:max-w-none max-lg:max-h-none max-lg:overflow-visible max-lg:px-4 max-lg:pb-4 max-lg:order-3">
               <div className="mb-2">
                 <div className="text-[10px] uppercase tracking-widest text-slate-500 mb-1">Now playing</div>
                 <div className="font-display font-bold text-xl text-slate-100">{song.name}</div>
@@ -253,7 +253,7 @@ export default function MusicBrain({ open, onClose }: { open: boolean; onClose: 
               </AnimatePresence>
             </div>
 
-            <div className="absolute top-4 right-5 w-60 rounded-2xl bg-[#070b16]/75 backdrop-blur-md border border-white/[0.07] p-4 z-10">
+            <div className="absolute top-4 right-5 w-60 rounded-2xl bg-[#070b16]/75 backdrop-blur-md border border-white/[0.07] p-4 z-10 max-lg:static max-lg:top-auto max-lg:right-auto max-lg:w-auto max-lg:mx-4 max-lg:mt-3 max-lg:order-2">
               <div className="flex items-center justify-between mb-1.5">
                 <div className="text-[10px] uppercase tracking-widest text-slate-500">Now processing</div>
                 <button onClick={() => setShowScience(true)} className="text-[10px] text-slate-500 hover:text-cyan">how?</button>
@@ -281,7 +281,7 @@ export default function MusicBrain({ open, onClose }: { open: boolean; onClose: 
             <AnimatePresence>
               {showScience && (
                 <motion.div initial={{ x: 40, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 40, opacity: 0 }}
-                  className="absolute top-0 right-0 bottom-0 w-[380px] bg-[#070b16]/95 backdrop-blur-xl border-l border-white/[0.08] overflow-y-auto p-5 z-20">
+                  className="absolute top-0 right-0 bottom-0 w-[380px] bg-[#070b16]/95 backdrop-blur-xl border-l border-white/[0.08] overflow-y-auto p-5 z-20 max-lg:fixed max-lg:inset-0 max-lg:w-full max-lg:border-l-0 max-lg:z-[110]">
                   <div className="flex items-center justify-between mb-1">
                     <h3 className="font-display font-semibold text-slate-100">How the recruitment is computed</h3>
                     <button onClick={() => setShowScience(false)} className="text-slate-500 hover:text-white"><X className="w-4 h-4" /></button>

@@ -38,7 +38,7 @@ export default function PathwayDiagram() {
       <div className="overflow-x-auto">
         <svg
           viewBox="0 0 620 360"
-          className="w-full min-w-[400px]"
+          className="w-full min-w-0 lg:min-w-[400px]"
           style={{ minHeight: 280 }}
         >
                     <defs>

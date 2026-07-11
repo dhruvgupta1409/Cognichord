@@ -124,8 +124,10 @@ export default function NeuroTheater({ open, onClose }: { open: boolean; onClose
             </div>
           </div>
 
-          <div className="flex-1 relative min-h-0">
-            {open && <CinematicJourney paused={!open} onState={onJourney} />}
+          <div className="flex-1 relative min-h-0 max-lg:flex max-lg:flex-col max-lg:overflow-y-auto">
+            <div className={`absolute inset-0 max-lg:static max-lg:h-[46vh] max-lg:flex-shrink-0 max-lg:order-1 ${showMechanisms ? 'max-lg:hidden' : ''}`}>
+              {open && <CinematicJourney paused={!open} onState={onJourney} />}
+            </div>
 
             <div className="absolute top-4 left-5 z-10 pointer-events-none">
               <div className="text-[10px] uppercase tracking-widest text-slate-500 mb-2">The dive</div>
@@ -147,7 +149,7 @@ export default function NeuroTheater({ open, onClose }: { open: boolean; onClose
               </div>
             </div>
 
-            <div className="absolute top-[248px] left-5 z-10 w-[340px] max-w-[38vw] max-h-[calc(100vh-320px)] overflow-y-auto pr-1">
+            <div className="absolute top-[248px] left-5 z-10 w-[340px] max-w-[38vw] max-h-[calc(100vh-320px)] overflow-y-auto pr-1 max-lg:static max-lg:top-auto max-lg:left-auto max-lg:w-full max-lg:max-w-none max-lg:max-h-none max-lg:overflow-visible max-lg:px-4 max-lg:pb-4 max-lg:order-3">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={state.stage}
@@ -176,7 +178,7 @@ export default function NeuroTheater({ open, onClose }: { open: boolean; onClose
               {atSynapse && state.data && (
                 <motion.div
                   initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}
-                  className="absolute top-24 right-5 z-10 w-64 rounded-2xl bg-[#070b16]/85 backdrop-blur-md border border-gold/25 p-4 pointer-events-none"
+                  className="absolute top-24 right-5 z-10 w-64 rounded-2xl bg-[#070b16]/85 backdrop-blur-md border border-gold/25 p-4 pointer-events-none max-lg:static max-lg:top-auto max-lg:right-auto max-lg:w-auto max-lg:mx-4 max-lg:mb-4 max-lg:order-4"
                 >
                   <div className="flex items-center gap-1.5 mb-2">
                     <FlaskConical className="w-3.5 h-3.5 text-gold-light" />
@@ -193,7 +195,7 @@ export default function NeuroTheater({ open, onClose }: { open: boolean; onClose
               )}
             </AnimatePresence>
 
-            <div className="absolute bottom-16 left-1/2 -translate-x-1/2 w-[min(720px,92vw)] z-10 pointer-events-none">
+            <div className="absolute bottom-16 left-1/2 -translate-x-1/2 w-[min(720px,92vw)] z-10 pointer-events-none max-lg:static max-lg:bottom-auto max-lg:left-auto max-lg:translate-x-0 max-lg:w-full max-lg:px-4 max-lg:pt-4 max-lg:pb-1 max-lg:order-2">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={atSynapse && state.event ? state.event : meta.id}
@@ -214,7 +216,7 @@ export default function NeuroTheater({ open, onClose }: { open: boolean; onClose
               {showMechanisms && (
                 <motion.div
                   initial={{ x: 40, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 40, opacity: 0 }}
-                  className="absolute top-0 right-0 bottom-0 w-[360px] bg-[#070b16]/95 backdrop-blur-xl border-l border-white/[0.08] overflow-y-auto p-5 z-20"
+                  className="absolute top-0 right-0 bottom-0 w-[360px] bg-[#070b16]/95 backdrop-blur-xl border-l border-white/[0.08] overflow-y-auto p-5 z-20 max-lg:fixed max-lg:inset-0 max-lg:w-full max-lg:border-l-0 max-lg:z-[110]"
                 >
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2"><Info className="w-4 h-4 text-emerald" /><h3 className="font-display font-semibold text-slate-100">What is under the hood</h3></div>

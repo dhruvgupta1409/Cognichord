@@ -65,7 +65,7 @@ export default function NeuronZoom({ open, regionId, onClose }: { open: boolean;
             <button onClick={onClose} className="w-9 h-9 rounded-lg border border-white/10 bg-black/40 text-slate-300 hover:text-white flex items-center justify-center"><X className="w-4 h-4" /></button>
           </div>
 
-          <div className="absolute left-5 bottom-6 max-w-[380px]">
+          <div className="absolute left-5 bottom-6 max-w-[380px] max-sm:left-4 max-sm:right-4 max-sm:max-w-none">
             <AnimatePresence mode="wait">
               <motion.div
                 key={step}
@@ -86,7 +86,7 @@ export default function NeuronZoom({ open, regionId, onClose }: { open: boolean;
           </div>
 
           {Step.labels === 'synapse' && (
-            <div className="absolute right-5 bottom-6 w-56 rounded-2xl bg-[#070b16]/80 backdrop-blur-md border border-white/[0.08] p-4">
+            <div className="absolute right-5 bottom-6 w-56 rounded-2xl bg-[#070b16]/80 backdrop-blur-md border border-white/[0.08] p-4 max-sm:top-20 max-sm:bottom-auto">
               <div className="text-[10px] uppercase tracking-widest text-slate-500 mb-2">Synapse strength (LTP)</div>
               <div className="h-2 rounded-full bg-white/[0.06] overflow-hidden mb-3">
                 <div className="h-full rounded-full transition-[width] duration-300" style={{ width: `${ltp * 100}%`, background: color, boxShadow: `0 0 10px ${color}` }} />

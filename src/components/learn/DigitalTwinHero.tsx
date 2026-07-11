@@ -55,7 +55,7 @@ export default function DigitalTwinHero({ onLaunch, paused = false }: { onLaunch
 
   return (
     <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-[#04060e] ring-1 ring-white/[0.04] shadow-[0_24px_70px_-24px_rgba(0,212,255,0.35)]">
-      <div className="relative aspect-[16/9] sm:aspect-[21/9]">
+      <div className="relative aspect-[3/2] sm:aspect-[21/9]">
         <BrainStage onOpen={() => {}} activity={activity} engagement={engagement} myelin={myelin} bloom={0.32} paused={paused} className="absolute inset-0" />
 
         <div className="absolute top-4 left-4 max-w-[260px] pointer-events-none">
@@ -68,14 +68,14 @@ export default function DigitalTwinHero({ onLaunch, paused = false }: { onLaunch
           </div>
         </div>
 
-        <div className="absolute bottom-4 left-4 flex gap-4">
+        <div className="absolute bottom-4 left-4 flex gap-4 max-sm:bottom-[4.25rem] max-sm:gap-2">
           <Chip label="Playable" value={day.skill} color="#34D399" />
           <Chip label="Retained" value={day.retention} color="#00D4FF" />
           <Chip label="Automatic" value={day.automaticity} color="#C4B5FD" />
         </div>
 
-        <div className="absolute bottom-4 right-4">
-          <button onClick={onLaunch} className="btn-primary inline-flex items-center gap-2 !py-2">
+        <div className="absolute bottom-4 right-4 max-sm:left-4 max-sm:right-4">
+          <button onClick={onLaunch} className="btn-primary inline-flex items-center gap-2 !py-2 max-sm:w-full max-sm:justify-center">
             Open the full simulation <ArrowRight className="w-4 h-4" />
           </button>
         </div>

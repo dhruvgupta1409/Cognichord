@@ -108,8 +108,9 @@ export default function BrainExplorer({
                   cutaway ? 'border-cyan/40 bg-cyan/[0.1] text-cyan' : 'border-white/10 text-slate-400 hover:text-slate-200 hover:border-white/20'
                 }`}
               >
-                <Layers className="w-3.5 h-3.5" />
-                {cutaway ? 'Cortex peeled' : 'Peel back the cortex'}
+                <Layers className="w-3.5 h-3.5 flex-shrink-0" />
+                <span className="hidden sm:inline">{cutaway ? 'Cortex peeled' : 'Peel back the cortex'}</span>
+                <span className="sm:hidden">{cutaway ? 'Peeled' : 'Peel'}</span>
               </button>
               <button
                 onClick={onClose}
