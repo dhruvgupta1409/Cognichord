@@ -7,7 +7,9 @@ import BiophysicalSimulation from './BiophysicalSimulation';
 const clamp = (x: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, x));
 
 function simParamsFor(session: PracticeSession): SimParams {
-  const repetitions = clamp(Math.round(session.durationMin / 2), 6, 48);
+  // Capped at 30 so the run finishes in a reasonable time on a free (slow-CPU) cloud backend
+  // — Brian2 runs in numpy mode there (~3s/trial + ~35s setup). Still a full learning curve.
+  const repetitions = clamp(Math.round(session.durationMin / 2), 6, 30);
   const difficulty = clamp((session.complexity - 1) / 4, 0, 1);
   const focus = session.sessionFocus != null ? clamp((session.sessionFocus - 1) / 4, 0, 1) : 0.6;
   return { repetitions, difficulty, focus, seed: seedFromString(session.id) };
